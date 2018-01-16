@@ -1,0 +1,11 @@
+# Build files
+public/dist/bundle.js
+
+# JetBrains IDE Settings
+.idea/
+
+# Nodejs Dependency
+node_modules/
+
+# OS Files
+.DS_Store

@@ -1,0 +1,48 @@
+{
+  "name": "twilio-taskrouter-contact-center",
+  "description": "Contact Center System powered by Twilio TaskRouter.",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start:dev": "yarn run build && DEBUG=express:* nodemon ./bin/www",
+    "start": "yarn run build && node ./bin/www",
+    "build": "webpack"
+  },
+  "author": {
+    "name": "KDDI Web Communications Inc.",
+    "email": "yuto.yamada@kddi-web.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "twilio",
+    "taskrouter",
+    "node",
+    "express"
+  ],
+  "engines": {
+    "node": ">=8.9.4"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "debug": "~3.1.0",
+    "dotenv-safe": "~4.0.4",
+    "express": "~4.16.2",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5",
+    "twilio": "~3.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "~7.0.0-beta.37",
+    "@babel/preset-env": "~7.0.0-beta.37",
+    "babel-loader": "~8.0.0-beta.0",
+    "css-loader": "~0.28.8",
+    "file-loader": "~1.1.6",
+    "nodemon": "~1.14.11",
+    "url-loader": "~0.6.2",
+    "vue": "~2.5.13",
+    "vue-loader": "~13.7.0",
+    "vue-router": "~3.0.1",
+    "vue-template-compiler": "~2.5.13",
+    "webpack": "~3.10.0"
+  }
+}
