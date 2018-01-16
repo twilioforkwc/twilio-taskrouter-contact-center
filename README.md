@@ -13,7 +13,7 @@ Create account if you don't have.
 [Twilio (Other)](https://www.twilio.com)
 
 ### Application
-Fork and clone the repository. Then, start application with
+Fork and clone the repository. Then, install dependencies with
 
 `npm install` or `yarn install`
 
