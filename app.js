@@ -8,7 +8,9 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
+// Route files path
 const index = require('./routes/index');
+const workers = require('./routes/api/twilio/workers');
 
 const app = express();
 
@@ -18,7 +20,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routing group
 app.use('/', index);
+app.use('/api/twilio/workers', workers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

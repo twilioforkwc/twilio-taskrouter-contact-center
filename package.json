@@ -23,20 +23,24 @@
     "node": ">=8.9.4"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "~1.18.2",
     "debug": "~3.1.0",
     "dotenv-safe": "~4.0.4",
+    "element-ui": "^2.0.11",
     "express": "~4.16.2",
     "morgan": "~1.9.0",
     "serve-favicon": "~2.4.5",
-    "twilio": "~3.11.0"
+    "twilio": "^3.11.1"
   },
   "devDependencies": {
     "@babel/core": "~7.0.0-beta.37",
     "@babel/preset-env": "~7.0.0-beta.37",
     "babel-loader": "~8.0.0-beta.0",
     "css-loader": "~0.28.8",
+    "element-theme-chalk": "^2.0.11",
     "file-loader": "~1.1.6",
+    "mocky": "^0.1.11",
     "nodemon": "~1.14.11",
     "url-loader": "~0.6.2",
     "vue": "~2.5.13",

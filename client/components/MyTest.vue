@@ -1,7 +1,10 @@
 <template>
     <div class="hello">
-        <h1>{{ msg }}</h1>
-        <h2>Essential Links</h2>
+        <h1>{{ msg }}{{ count }}</h1>
+        <h2>MyTest Links</h2>
+        <button v-on:click="awesomeClick">Click!</button>
+        hogehogehoge
+        <el-slider v-model="value1"></el-slider>
         <ul>
             <li>
                 <a href="https://vuejs.org" target="_blank">
@@ -57,11 +60,29 @@
 </template>
 
 <script>
+
+    const WORKER = 'defaultman';
+    import axios from 'axios';
+
     export default {
         name: 'HelloWorld',
         data() {
             return {
-                msg: 'Welcome to Your Vue.js App'
+                count: 0,
+                value1: 50,
+                msg: 'Welcome to Your Vue.js App!!'
+            }
+        },
+        mounted() {
+            axios.get("http://localhost:3000/api/twilio/workers")
+                .then(response => {
+                    console.log(response.data[0]);
+                    this.msg = response.data[0].friendlyName
+                })
+        },
+        methods: {
+            awesomeClick: function () {
+                console.log('clicked');
             }
         }
     }
