@@ -5,9 +5,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import locale from 'element-ui/lib/locale/lang/ja'
 
-// 設定を.envからロード
-require('dotenv').config();
-
 Vue.use(ElementUI, {locale});
 
 new Vue({

@@ -61,7 +61,6 @@
 
 <script>
 
-    const WORKER = 'defaultman';
     import axios from 'axios';
 
     export default {
