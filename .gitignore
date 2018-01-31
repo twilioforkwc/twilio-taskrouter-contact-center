@@ -1,11 +1,16 @@
 # Build files
-public/dist/bundle.js
+public/dist/bundle.js*
 
 # JetBrains IDE Settings
 .idea/
 
-# Nodejs Dependency
+# Nodejs
 node_modules/
+npm-debug.log
+.config/
+.npm/
+.yarn/
+.cache/
 
 # OS Files
 .DS_Store

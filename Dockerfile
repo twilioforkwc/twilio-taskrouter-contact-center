@@ -16,16 +16,18 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 # Set workdir
-WORKDIR /usr/src/app
+ENV HOME=/usr/src/app
+WORKDIR $HOME
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Create user
+RUN useradd --user-group --create-home --shell /bin/false app
+RUN chown -R app:app $HOME
+USER app
+
+# Copy package.json and yarn.lock
+COPY package*.json yarn.lock ./
 
 # Install required node library
 RUN yarn install
 
-# Bundle app source
-COPY . .
-
-CMD ["tail", "-f", "/dev/null"]
-#CMD ["yarn", "run", "start:dev"]
+CMD ["yarn", "run", "start"]
