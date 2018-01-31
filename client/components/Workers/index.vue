@@ -23,7 +23,7 @@
     import axios from 'axios';
 
     export default {
-        name: 'HelloWorld',
+        name: 'Workers',
         data() {
             return {
                 count: 0,
