@@ -2,19 +2,45 @@
     <div style="width: calc(100% - 10px); padding: 10px;">
         <h1>{{ title }}</h1>
         <div style="margin: 10px 0;">
+            
             <el-table :data="operators" style="width: 100%">
-                <router-link to="workers/[ここにワーカーSID]">
-                    <el-table-column prop="friendlyName" label="オペーレーター" width="180"></el-table-column>
-                </router-link>
-                <el-table-column prop="activityName" label="ACTIVITY" width="180">
+                <el-table-column label="登録日" width="180">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{ scope.row.dateCreated }}</span>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="dateStatusChanged" label="ACTIVITY経過時間">
+                <el-table-column label="氏名" width="180">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>Name: {{ scope.row.friendlyName }}</p>
+                            <p>Sid: {{ scope.row.sid }}</p>
+                            <div slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.friendlyName }}</el-tag>
+                            </div>
+                        </el-popover>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="available" label="AVAILABLE">
+                <el-table-column label="アクティビティ" width="180">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{ scope.row.activityName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="handleShow(scope.$index, scope.row)">Show</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
+
+            <div style="width: 100%; padding: 10px; text-align: left;">
+                <el-button type="primary" @click="handleCreate()">オペーレーターを追加</el-button>
+            </div>
+
         </div>
-        <button v-on:click="awesomeClick">オペーレーターを追加</button>
     </div>
 </template>
 
@@ -39,11 +65,24 @@
                     console.log(response.data[0]);
                     this.msg = response.data[0].friendlyName
                     this.operators = response.data;
-                })
+                });
         },
         methods: {
-            awesomeClick: function () {
-                console.log('clicked');
+            handleCreate: function () {
+                location.href = '/#/workers/create';
+            },
+            handleShow: function (index, row_data) {
+                location.href = '/#/workers/show';
+            },
+            handleEdit: function (index, row_data) {
+                location.href = '/#/workers/show';
+            },
+            handleDelete: function (index, row_data) {
+                // location.href = '/#/workers/show';
+                axios.get("/api/twilio/workers/"+row_data.sid+"/delete")
+                    .then(response => {
+                        location.href = '/#/workers';
+                    });
             }
         }
     }

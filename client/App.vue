@@ -7,10 +7,10 @@
                         <template slot="title"><i class="el-icon-setting"></i>Settings</template>
                         <el-menu-item-group>
                             <template slot="title">オペレーター管理</template>
-                                <a href="/#/">
-                                    <el-menu-item index="1-1">一覧</el-menu-item>
-                                </a>
-                            <router-link to="test">
+                            <router-link to="workers">
+                                <el-menu-item index="1-1">一覧</el-menu-item>
+                            </router-link>
+                            <router-link to="workers/create">
                                 <el-menu-item index="1-2">新規登録</el-menu-item>
                             </router-link>
                             <router-link to="test2">

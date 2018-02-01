@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import SiteTop from '../components/SiteTop.vue'
 import WorkersIndex from '../components/Workers/index.vue'
+import WorkersCreate from '../components/Workers/create.vue'
 import WorkersShow from '../components/Workers/show.vue'
-import MyTest2 from '../components/MyTest2.vue'
+import MyTest2 from '../components/SiteTop.vue'
 
 Vue.use(Router)
 
@@ -20,8 +21,13 @@ export default new Router({
             component: WorkersIndex
         },
         {
+            path: '/workers/create',
+            name: 'WorkersCreate',
+            component: WorkersCreate
+        },
+        {
             path: '/workers/show',
-            name: 'Workers',
+            name: 'WorkersShow',
             component: WorkersShow
         },
         {

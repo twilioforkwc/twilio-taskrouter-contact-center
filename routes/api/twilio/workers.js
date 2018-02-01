@@ -51,9 +51,28 @@ router.get('/show/:sid', function (req, res, next) {
  * Worker追加API
  */
 router.post('/create', function (req, res, next) {
-    var param = { "Pending": "Add worker's api is not prepared yet." };
-    // res.header('Content-Type', 'application/json; charset=utf-8')
-    res.send(param);
+
+    // GET Request parameters.
+    var obj = req.body;
+    var result = Object.keys(obj).filter( (key) => { 
+        return obj[key] === '';
+    });
+
+    // Parse json text.
+    result = JSON.parse(result[0]);
+
+    // Request Twioio API.
+    try {
+        client.taskrouter.v1.workspaces(workspaceSid).workers.create({
+            friendlyName: result.name,
+            activityName: result.activity,
+            attributes: result.attributes,
+        }).then(reseult => {
+            res.send({ "status" : "OK" });
+        });
+    } catch (error) {
+        res.send({ "status" : "NG" });
+    }
 });
 
 module.exports = router;
