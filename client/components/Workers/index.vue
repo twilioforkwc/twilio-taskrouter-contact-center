@@ -34,7 +34,7 @@
             }
         },
         mounted() {
-            axios.get("http://localhost:3000/api/twilio/workers")
+            axios.get("/api/twilio/workers")
                 .then(response => {
                     console.log(response.data[0]);
                     this.msg = response.data[0].friendlyName

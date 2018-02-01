@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "start": "[ $NODE_ENV = production ] && yarn run start:prd || yarn run start:dev",
+    "start:prd": "yarn run build && node ./bin/www",
     "start:dev": "yarn run build && DEBUG=express:* nodemon ./bin/www",
-    "start": "yarn run build && node ./bin/www",
     "build": "webpack"
   },
   "author": {
