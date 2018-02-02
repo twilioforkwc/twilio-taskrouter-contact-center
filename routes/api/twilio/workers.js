@@ -42,16 +42,70 @@ router.get('/', function (req, res, next) {
  * Worker詳細API
  */
 router.get('/show/:sid', function (req, res, next) {
-    var param = { "Pending": "Show worker detail's api is not prepared yet." };
-    // res.header('Content-Type', 'application/json; charset=utf-8')
-    res.send(param);
+    // Request Twioio API.
+    try {
+        client.taskrouter.v1
+            .workspaces(workspaceSid)
+            .workers(req.params.sid)
+            .fetch()
+            .then(worker => {
+                res.send({
+                    status: "OK",
+                    friendlyName: worker.friendlyName,
+                    activityName: worker.activityName,
+                    attributes: worker.attributes
+                });
+            });
+    } catch (error) {
+        res.send({ status: "NG" });
+    }
 });
 
 /**
  * Worker追加API
  */
 router.post('/create', function (req, res, next) {
+    // Parse json text.
+    paramsJson = parseRequestParameter(req);
 
+    // Request Twioio API.
+    try {
+        client.taskrouter.v1.workspaces(workspaceSid).workers.create({
+            friendlyName: paramsJson.name,
+            activityName: paramsJson.activity,
+            attributes: paramsJson.attributes,
+        }).then(reseult => {
+            res.send({ status: "OK" });
+        });
+    } catch (error) {
+        res.send({ status: "NG" });
+    }
+});
+
+/**
+ * Worker追加API
+ */
+router.put('/update/:sid', function (req, res, next) {
+    console.log('put test');
+    // // Parse json text.
+    paramsJson = parseRequestParameter(req);
+    res.send('testestests'+req.params.sid+paramsJson.name);
+
+    // // Request Twioio API.
+    // try {
+    //     client.taskrouter.v1.workspaces(workspaceSid).workers.create({
+    //         friendlyName: result.name,
+    //         activityName: result.activity,
+    //         attributes: result.attributes,
+    //     }).then(reseult => {
+    //         res.send({ status: "OK" });
+    //     });
+    // } catch (error) {
+    //     res.send({ status: "NG" });
+    // }
+});
+
+function parseRequestParameter (req) {
     // GET Request parameters.
     var obj = req.body;
     var result = Object.keys(obj).filter( (key) => { 
@@ -59,20 +113,9 @@ router.post('/create', function (req, res, next) {
     });
 
     // Parse json text.
-    result = JSON.parse(result[0]);
+    resultJson = JSON.parse(result[0]);
 
-    // Request Twioio API.
-    try {
-        client.taskrouter.v1.workspaces(workspaceSid).workers.create({
-            friendlyName: result.name,
-            activityName: result.activity,
-            attributes: result.attributes,
-        }).then(reseult => {
-            res.send({ "status" : "OK" });
-        });
-    } catch (error) {
-        res.send({ "status" : "NG" });
-    }
-});
+    return resultJson;
+}
 
 module.exports = router;

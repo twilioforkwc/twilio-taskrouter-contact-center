@@ -72,14 +72,14 @@
                 location.href = '/#/workers/create';
             },
             handleShow: function (index, row_data) {
-                location.href = '/#/workers/show';
+                location.href = '/#/workers/show/'+row_data.sid;
             },
             handleEdit: function (index, row_data) {
-                location.href = '/#/workers/show';
+                location.href = '/#/workers/edit/'+row_data.sid;
             },
             handleDelete: function (index, row_data) {
                 // location.href = '/#/workers/show';
-                axios.get("/api/twilio/workers/"+row_data.sid+"/delete")
+                axios.get("/api/twilio/workers/delete/"+row_data.sid)
                     .then(response => {
                         location.href = '/#/workers';
                     });

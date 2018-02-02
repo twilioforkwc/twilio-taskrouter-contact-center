@@ -4,6 +4,7 @@ import SiteTop from '../components/SiteTop.vue'
 import WorkersIndex from '../components/Workers/index.vue'
 import WorkersCreate from '../components/Workers/create.vue'
 import WorkersShow from '../components/Workers/show.vue'
+import WorkersEdit from '../components/Workers/edit.vue'
 import MyTest2 from '../components/SiteTop.vue'
 
 Vue.use(Router)
@@ -26,9 +27,14 @@ export default new Router({
             component: WorkersCreate
         },
         {
-            path: '/workers/show',
+            path: '/workers/:sid/show',
             name: 'WorkersShow',
             component: WorkersShow
+        },
+        {
+            path: '/workers/:sid/edit',
+            name: 'WorkersEdit',
+            component: WorkersEdit
         },
         {
             path: '/test2',
