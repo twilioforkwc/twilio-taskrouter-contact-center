@@ -83,26 +83,48 @@ router.post('/create', function (req, res, next) {
 });
 
 /**
- * Worker追加API
+ * Worker更新API
  */
-router.put('/update/:sid', function (req, res, next) {
-    console.log('put test');
-    // // Parse json text.
+router.put('/update', function (req, res, next) {
+    // Parse json text.
     paramsJson = parseRequestParameter(req);
-    res.send('testestests'+req.params.sid+paramsJson.name);
+    // Request Twioio API.
+    try {
+        client.taskrouter.v1
+            .workspaces(workspaceSid)
+            .workers(paramsJson.sid)
+            .update({
+                friendlyName: paramsJson.name,
+                activityName: paramsJson.activity,
+                attributes: paramsJson.attributes
+            })
+            .then(
+                worker =>
+                {
+                    res.send({ status: "OK" });
+                }
+            );
+    } catch (error) {
+        console.log(error);
+        res.send({ status: "NG" });
+    }
+});
 
-    // // Request Twioio API.
-    // try {
-    //     client.taskrouter.v1.workspaces(workspaceSid).workers.create({
-    //         friendlyName: result.name,
-    //         activityName: result.activity,
-    //         attributes: result.attributes,
-    //     }).then(reseult => {
-    //         res.send({ status: "OK" });
-    //     });
-    // } catch (error) {
-    //     res.send({ status: "NG" });
-    // }
+/**
+ * Worker削除API
+ */
+router.delete('/:sid', function (req, res, next) {
+    // Request Twioio API.
+    try {
+        client.taskrouter.v1
+            .workspaces(workspaceSid)
+            .workers(req.params.sid)
+            .remove();
+        res.send({ status: "OK" });
+    } catch (error) {
+        console.log(error);
+        res.send({ status: "NG" });
+    }
 });
 
 function parseRequestParameter (req) {

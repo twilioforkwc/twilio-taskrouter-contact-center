@@ -29,7 +29,6 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleShow(scope.$index, scope.row)">Show</el-button>
                         <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                         <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
                     </template>
@@ -72,16 +71,21 @@
                 location.href = '/#/workers/create';
             },
             handleShow: function (index, row_data) {
-                location.href = '/#/workers/show/'+row_data.sid;
+                location.href = '/#/workers/'+row_data.sid+'/show';
             },
             handleEdit: function (index, row_data) {
-                location.href = '/#/workers/edit/'+row_data.sid;
+                location.href = '/#/workers/'+row_data.sid+'/edit';
             },
             handleDelete: function (index, row_data) {
                 // location.href = '/#/workers/show';
-                axios.get("/api/twilio/workers/delete/"+row_data.sid)
+                axios.delete("/api/twilio/workers/"+row_data.sid)
                     .then(response => {
-                        location.href = '/#/workers';
+                        console.log(response.data.status);
+                        if (response.data.status === 'OK') {
+                            location.href = '/#/workers';
+                        } else {
+                            console.log('NGNGNGNGNGGN');
+                        }
                     });
             }
         }
