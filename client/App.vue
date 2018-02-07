@@ -7,14 +7,20 @@
                         <template slot="title"><i class="el-icon-setting"></i>Settings</template>
                         <el-menu-item-group>
                             <template slot="title">オペレーター管理</template>
-                            <router-link to="workers">
+                            <router-link to="/workers">
                                 <el-menu-item index="1-1">一覧</el-menu-item>
                             </router-link>
-                            <router-link to="workers/create">
+                            <router-link to="/workers/create">
                                 <el-menu-item index="1-2">新規登録</el-menu-item>
                             </router-link>
-                            <router-link to="test2">
+                            <router-link to="/test2">
                                 <el-menu-item index="1-3">テスト</el-menu-item>
+                            </router-link>
+                        </el-menu-item-group>
+                        <el-menu-item-group>
+                            <template slot="title">IVR設定</template>
+                            <router-link to="/ivrs">
+                                <el-menu-item index="1-4">詳細</el-menu-item>
                             </router-link>
                         </el-menu-item-group>
                     </el-submenu>
@@ -55,7 +61,7 @@
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-align: center;
+        text-align: left;
         color: #2c3e50;
         margin-top: 60px;
     }

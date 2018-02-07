@@ -6,6 +6,7 @@ import WorkersCreate from '../components/Workers/create.vue'
 import WorkersShow from '../components/Workers/show.vue'
 import WorkersEdit from '../components/Workers/edit.vue'
 import MyTest2 from '../components/SiteTop.vue'
+import IvrIndex from '../components/Ivrs/index.vue'
 
 Vue.use(Router)
 
@@ -15,6 +16,11 @@ export default new Router({
             path: '/',
             name: 'SiteTop',
             component: SiteTop
+        },
+        {
+            path: '/ivrs',
+            name: 'IvrIndex',
+            component: IvrIndex
         },
         {
             path: '/workers',

@@ -26,8 +26,8 @@
                         </el-popover>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">Create</el-button>
-                        <el-button>Cancel</el-button>
+                        <el-button type="primary" @click="onSubmit">Update</el-button>
+                        <router-link to="/workers"><el-button>Cancel</el-button></router-link>
                     </el-form-item>
                 </el-form>
     
