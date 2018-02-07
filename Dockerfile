@@ -19,13 +19,13 @@ RUN apt-get update && apt-get install -y \
 ENV HOME=/usr/src/app
 WORKDIR $HOME
 
+# Copy package.json and yarn.lock
+COPY package*.json yarn.lock ./
+
 # Create user
 RUN useradd --user-group --create-home --shell /bin/false app
 RUN chown -R app:app $HOME
 USER app
-
-# Copy package.json and yarn.lock
-COPY package*.json yarn.lock ./
 
 # Install required node library
 RUN yarn install
