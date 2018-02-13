@@ -1,4 +1,18 @@
+
+'use strict'
+// process = { 
+//     env: { NODE_ENV: 'development'},
+//     cwd: function(){},
+// };
+var webpack = require('webpack');
+// require('dotenv').config();
+const path = require('path')
+
 module.exports = {
+    // externals: {
+    //     'fs-extra': 'fs-extra',
+    //     'fs': 'fs',
+    // },
     entry: './client/main.js',
     output: {
         path: __dirname,
@@ -16,14 +30,36 @@ module.exports = {
             {
                 test: /\.vue$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                    },
-                    {
-                        loader: 'vue-loader',
-                    },
-                ]
+                loader: ['babel-loader', 'vue-loader'],
+                // exclude: /node_modules\/(?!(fs)\/).*/,
+                // use: [
+                //     {
+                //         loader: 'babel-loader',
+                //     },
+                //     {
+                //         loader: 'vue-loader',
+                //     },
+                //     {
+                //         loader: 'vue-template-compiler',
+                //     }
+                // ]
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, "node_modules/")
+                ],
+                // include: /node_modules\/fs\//,
+            },
+            {
+                test: /\.jsx$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, "node_modules/fs")
+                ],
             },
             {
                 test: /\.png$/,
@@ -42,12 +78,18 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.js'],
+        extensions: ['.js', '.jsx'],
     },
     devtool: 'source-map',
-    node: {
-        fs: 'empty',
-        net: 'empty',
-        tls: 'empty'
-    }
+    // target: 'node',
+    // node: {
+    //     fs: 'empty',
+    //     net: 'empty',
+    //     tls: 'empty',
+    // },
+    // plugins: [
+    //     new webpack.DefinePlugin({
+    //         'process.env.NODE_ENV': JSON.stringify('production')
+    //     })
+    // ],
 };
