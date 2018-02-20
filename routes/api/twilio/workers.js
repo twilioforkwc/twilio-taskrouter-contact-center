@@ -66,14 +66,19 @@ router.get('/show/:sid', function (req, res, next) {
  */
 router.post('/create', function (req, res, next) {
     // Parse json text.
-    paramsJson = parseRequestParameter(req);
+    var paramsJson = parseRequestParameter(req);
+    var mAttributes = {
+        name: paramsJson.name,
+        technical_skill: paramsJson.skills,
+        languages: paramsJson.languages,
+    };
 
     // Request Twioio API.
     try {
         client.taskrouter.v1.workspaces(workspaceSid).workers.create({
             friendlyName: paramsJson.name,
             activityName: paramsJson.activity,
-            attributes: paramsJson.attributes,
+            attributes: JSON.stringify(mAttributes),
         }).then(reseult => {
             res.send({ status: "OK" });
         });
@@ -87,7 +92,12 @@ router.post('/create', function (req, res, next) {
  */
 router.put('/update', function (req, res, next) {
     // Parse json text.
-    paramsJson = parseRequestParameter(req);
+    var paramsJson = parseRequestParameter(req);
+    var mAttributes = {
+        name: paramsJson.name,
+        technical_skill: paramsJson.skills,
+        languages: paramsJson.languages,
+    };
     // Request Twioio API.
     try {
         client.taskrouter.v1
@@ -96,7 +106,7 @@ router.put('/update', function (req, res, next) {
             .update({
                 friendlyName: paramsJson.name,
                 activityName: paramsJson.activity,
-                attributes: paramsJson.attributes
+                attributes: JSON.stringify(mAttributes),
             })
             .then(
                 worker =>
