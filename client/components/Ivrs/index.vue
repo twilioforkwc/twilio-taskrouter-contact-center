@@ -4,13 +4,13 @@
         <div style="margin: 10px 0;">
             
             <el-table :data="ivr_settings" style="width: 100%">
-                <el-table-column label="登録日" width="180">
+                <el-table-column label="登録日">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
                         <span style="margin-left: 10px">{{ scope.row.dateCreated }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="氏名" width="180">
+                <el-table-column label="氏名">
                     <template slot-scope="scope">
                         <el-popover trigger="hover" placement="top">
                             <p>Name: {{ scope.row.friendlyName }}</p>
@@ -21,9 +21,8 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column label="アクティビティ" width="180">
+                <el-table-column label="アクティビティ">
                     <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
                         <span style="margin-left: 10px">{{ scope.row.activityName }}</span>
                     </template>
                 </el-table-column>

@@ -2,7 +2,7 @@
     <div id="app">
         <el-container style="height: 100%; border: 1px solid #eee">
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-                <el-menu :default-openeds="['1', '3']">
+                <el-menu :default-openeds="['1', '2', '3']">
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-setting"></i>Settings</template>
                         <el-menu-item-group>
@@ -21,6 +21,18 @@
                             <template slot="title">IVR設定</template>
                             <router-link to="/ivrs">
                                 <el-menu-item index="1-4">詳細</el-menu-item>
+                            </router-link>
+                        </el-menu-item-group>
+                        <el-menu-item-group>
+                            <template slot="title">ワークフロー設定</template>
+                            <router-link to="/workflows">
+                                <el-menu-item index="1-5">ワークフローリスト</el-menu-item>
+                            </router-link>
+                        </el-menu-item-group>
+                        <el-menu-item-group>
+                            <template slot="title">タスクキュー</template>
+                            <router-link to="/queues">
+                                <el-menu-item index="1-6">タスクキューリスト</el-menu-item>
                             </router-link>
                         </el-menu-item-group>
                     </el-submenu>

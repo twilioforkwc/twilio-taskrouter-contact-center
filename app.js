@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 const index = require('./routes/index');
 const workers = require('./routes/api/twilio/workers');
 const twiml = require('./routes/api/twilio/twiml');
+const workflows = require('./routes/api/twilio/workflows');
+const queues = require('./routes/api/twilio/taskqueues');
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/api/twilio/workers', workers);
 app.use('/api/twilio/twiml', twiml);
+app.use('/api/twilio/workflows', workflows);
+app.use('/api/twilio/taskqueues', queues);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
