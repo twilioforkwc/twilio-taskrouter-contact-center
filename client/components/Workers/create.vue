@@ -44,7 +44,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">Create</el-button>
-                    <el-button>Cancel</el-button>
+                    <el-button @click="onCancel">Cancel</el-button>
                 </el-form-item>
             </el-form>
 
@@ -85,6 +85,12 @@
                         if (response.data.status === 'OK') {
                             console.log('ワーカーの登録に成功しました');
                             location.href = '/#/workers';
+                            Notification.success(
+                                {
+                                    title: "Success",
+                                    message: "ワーカーを登録しました。"
+                                }
+                            );
                         } else {
                             console.log('ワーカーの登録に失敗しました');
                             Notification.error(
@@ -95,6 +101,9 @@
                             );
                         }
                     });
+            },
+            onCancel() {
+                location.href = '/#/workers';
             }
         }
     }

@@ -28,7 +28,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">Create</el-button>
+                    <el-button type="primary" @click="onSubmit">Update</el-button>
                     <el-button @click="onCancel">Cancel</el-button>
                 </el-form-item>
             </el-form>
@@ -54,9 +54,31 @@
                 }
             }
         },
+        mounted() {
+            console.log(this.$route.params.sid);
+            axios.get("/api/twilio/taskqueues/show/"+this.$route.params.sid)
+                .then(response => {
+                    if (response.data.status === 'OK') {
+                        var split_data = response.data.friendlyName.split('-');
+                        this.form.task_queue_key = split_data[0];
+                        this.form.task_queue_val = split_data[1];
+                        this.form.max_reserved_worker = response.data.maxReservedWorkers;
+                        // this.form.attributes = response.data.attributes;
+                    } else {
+                        console.log('タスクキュー情報の取得に失敗しました');
+                        Notification.error(
+                            {
+                                title: "Error",
+                                message: "タスクキュー情報の取得に失敗しました"
+                            }
+                        );
+                    }
+                });
+        },
         methods: {
             onSubmit() {
-                axios.post("/api/twilio/taskqueues/create", JSON.stringify({
+                axios.put("/api/twilio/taskqueues/update", JSON.stringify({
+                        sid: this.$route.params.sid,
                         task_queue_key: this.form.task_queue_key,
                         task_queue_val: this.form.task_queue_val,
                         max_reserved_worker: this.form.max_reserved_worker,
@@ -64,20 +86,20 @@
                     .then(response => {
                         console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('タスクキューの登録に成功しました');
+                            console.log('タスクキューを更新しました。');
                             location.href = '/#/taskqueues';
                             Notification.success(
                                 {
                                     title: "Success",
-                                    message: "タスクキューを登録しました。"
+                                    message: "タスクキューを更新しました。"
                                 }
                             );
                         } else {
-                            console.log('タスクキューの登録に失敗しました');
+                            console.log('タスクキューの更新に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
-                                    message: "タスクキューの登録に失敗しました"
+                                    message: "タスクキューの更新に失敗しました"
                                 }
                             );
                         }

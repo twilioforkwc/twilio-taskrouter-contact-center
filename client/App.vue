@@ -31,7 +31,7 @@
                         </el-menu-item-group>
                         <el-menu-item-group>
                             <template slot="title">タスクキュー</template>
-                            <router-link to="/queues">
+                            <router-link to="/taskqueues">
                                 <el-menu-item index="1-6">タスクキューリスト</el-menu-item>
                             </router-link>
                         </el-menu-item-group>

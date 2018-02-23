@@ -21,7 +21,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">Update</el-button>
-                    <router-link to="/workflows"><el-button>Cancel</el-button></router-link>
+                    <el-button @click="onCancel">Cancel</el-button>
                 </el-form-item>
             </el-form>
 
@@ -84,6 +84,12 @@
                         if (response.data.status === 'OK') {
                             console.log('ワークフローの更新に成功しました');
                             location.href = '/#/workflows';
+                            Notification.success(
+                                {
+                                    title: "Success",
+                                    message: "ワークフローを更新しました。"
+                                }
+                            );
                         } else {
                             console.log('ワークフローの更新に失敗しました');
                             Notification.error(
@@ -94,6 +100,9 @@
                             );
                         }
                     });
+            },
+            onCancel() {
+                location.href = '/#/workflows';
             }
         }
     }

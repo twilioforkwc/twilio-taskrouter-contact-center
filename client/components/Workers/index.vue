@@ -4,13 +4,13 @@
         <div style="margin: 10px 0;">
             
             <el-table :data="operators" style="width: 100%">
-                <el-table-column label="登録日" width="180">
+                <el-table-column label="登録日">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
                         <span style="margin-left: 10px">{{ scope.row.dateCreated }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="氏名" width="180">
+                <el-table-column label="氏名">
                     <template slot-scope="scope">
                         <el-popover trigger="hover" placement="top">
                             <p>Name: {{ scope.row.friendlyName }}</p>
@@ -21,7 +21,7 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column label="アクティビティ" width="180">
+                <el-table-column label="アクティビティ">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
                         <span style="margin-left: 10px">{{ scope.row.activityName }}</span>
@@ -83,8 +83,20 @@
                         console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             location.href = '/#/workers';
+                            Notification.success(
+                                {
+                                    title: "Success",
+                                    message: "ワーカーを削除しました。"
+                                }
+                            );
                         } else {
-                            console.log('NGNGNGNGNGGN');
+                            console.log('ワーカーの削除に失敗しました');
+                            Notification.error(
+                                {
+                                    title: "Error",
+                                    message: "ワーカーの削除に失敗しました"
+                                }
+                            );
                         }
                     });
             }

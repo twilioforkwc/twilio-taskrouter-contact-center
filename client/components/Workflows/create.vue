@@ -44,7 +44,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">Create</el-button>
-                    <el-button>Cancel</el-button>
+                    <el-button @click="onCancel">Cancel</el-button>
                 </el-form-item>
             </el-form>
 
@@ -82,18 +82,27 @@
                     .then(response => {
                         console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('ワーカーの登録に成功しました');
+                            console.log('ワークフローを登録しました');
                             location.href = '/#/workflows';
+                            Notification.success(
+                                {
+                                    title: "Success",
+                                    message: "ワークフローを登録しました"
+                                }
+                            );
                         } else {
-                            console.log('ワーカーの登録に失敗しました');
+                            console.log('ワークフローの登録に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
-                                    message: "ワーカーの登録に失敗しました"
+                                    message: "ワークフローの登録に失敗しました"
                                 }
                             );
                         }
                     });
+            },
+            onCancel() {
+                location.href = '/#/workflows';
             }
         }
     }

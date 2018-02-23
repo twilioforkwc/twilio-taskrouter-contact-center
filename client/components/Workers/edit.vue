@@ -46,7 +46,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">Update</el-button>
-                    <router-link to="/workers"><el-button>Cancel</el-button></router-link>
+                    <el-button @click="onCancel">Cancel</el-button>
                 </el-form-item>
             </el-form>
 
@@ -111,6 +111,12 @@
                         if (response.data.status === 'OK') {
                             console.log('ワーカーの更新に成功しました');
                             location.href = '/#/workers';
+                            Notification.success(
+                                {
+                                    title: "Success",
+                                    message: "ワーカーを更新しました。"
+                                }
+                            );
                         } else {
                             console.log('ワーカーの更新に失敗しました');
                             Notification.error(
@@ -121,6 +127,9 @@
                             );
                         }
                     });
+            },
+            onCancel() {
+                location.href = '/#/workers';
             }
         }
     }

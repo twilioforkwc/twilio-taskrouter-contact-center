@@ -13,6 +13,7 @@ import WorkflowShow from '../components/Workflows/show.vue'
 import WorkflowEdit from '../components/Workflows/edit.vue'
 import TaskQueueIndex from '../components/TaskQueues/index.vue'
 import TaskQueueCreate from '../components/TaskQueues/create.vue'
+import TaskQueueEdit from '../components/TaskQueues/edit.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,7 @@ export default new Router({
         { path: '/workflows/:sid/edit', name: 'WorkflowEdit', component: WorkflowEdit },
         { path: '/taskqueues', name: 'TaskQueueIndex', component: TaskQueueIndex },
         { path: '/taskqueues/create', name: 'TaskQueueCreate', component: TaskQueueCreate },
+        { path: '/taskqueues/:sid/edit', name: 'TaskQueueEdit', component: TaskQueueEdit },
         { path: '/test2', name: 'MyTest2', data: { message: 'weiweihogehoge' }, component: MyTest2 }
     ]
 })

@@ -43,22 +43,19 @@
 <script>
 
     import axios from 'axios';
-
+    import { Notification } from 'element-ui';
     export default {
         name: 'Workers',
         data() {
             return {
                 count: 0,
                 value1: 50,
-                title: 'ワークフロー',
+                title: 'タスクキュー',
                 task_queue_datas: []
             }
         },
         mounted() {
-            axios.get("/api/twilio/taskqueues")
-                .then(response => {
-                    this.task_queue_datas = response.data;
-                });
+            this.getListData();
         },
         methods: {
             handleCreate: function () {
@@ -75,10 +72,28 @@
                     .then(response => {
                         console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            location.href = '/#/taskqueues';
+                            this.getListData();
+                            Notification.success(
+                                {
+                                    title: "Success",
+                                    message: "タスクキューを削除しました。"
+                                }
+                            );
                         } else {
-                            console.log('NGNGNGNGNGGN');
+                            console.log('タスクキューの削除に失敗しました');
+                            Notification.error(
+                                {
+                                    title: "Error",
+                                    message: "タスクキューの削除に失敗しました"
+                                }
+                            );
                         }
+                    });
+            },
+            getListData: function () {
+                axios.get("/api/twilio/taskqueues")
+                    .then(response => {
+                        this.task_queue_datas = response.data;
                     });
             }
         }

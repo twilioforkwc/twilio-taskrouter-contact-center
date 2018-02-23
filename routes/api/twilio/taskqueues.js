@@ -42,14 +42,15 @@ router.get('/show/:sid', function (req, res, next) {
     try {
         client.taskrouter.v1
             .workspaces(workspaceSid)
-            .workers(req.params.sid)
+            .taskQueues(req.params.sid)
             .fetch()
-            .then(worker => {
+            .then(taskqueue => {
                 res.send({
                     status: "OK",
-                    friendlyName: worker.friendlyName,
-                    activityName: worker.activityName,
-                    attributes: worker.attributes
+                    friendlyName: taskqueue.friendlyName,
+                    reservationActivitySid: taskqueue.reservationActivitySid,
+                    assignmentActivitySid: taskqueue.assignmentActivitySid,
+                    maxReservedWorkers: taskqueue.maxReservedWorkers,
                 });
             });
     } catch (error) {
@@ -75,10 +76,18 @@ router.post('/create', function (req, res, next) {
             // friendlyName: paramsJson.name,
             // activityName: paramsJson.activity,
             // attributes: JSON.stringify(mAttributes),
+
+            // friendlyName: paramsJson.task_queue_key+'-'+paramsJson.task_queue_val,
+            // reservationActivitySid: 'WAa565844509dfee41c31af37541f6af8d',
+            // assignmentActivitySid: 'WA273cbfa957f970d12dd941953c69690c',
+            // targetWorkers: "'"+paramsJson.task_queue_key+' HAS '+'"'+paramsJson.task_queue_val+'"'+"'",
+
+            // friendlyName: 'test - queeu',
             friendlyName: paramsJson.task_queue_key+'-'+paramsJson.task_queue_val,
             reservationActivitySid: 'WAa565844509dfee41c31af37541f6af8d',
             assignmentActivitySid: 'WA273cbfa957f970d12dd941953c69690c',
-            targetWorkers: "'"+paramsJson.task_queue_key+' HAS '+'"'+paramsJson.task_queue_val+'"'+"'",
+            maxReservedWorkers: paramsJson.max_reserved_worker,
+            targetWorkers: paramsJson.task_queue_key+' HAS "'+paramsJson.task_queue_val+'"',
         }).then(reseult => {
             res.send({ status: "OK" });
         });
@@ -93,23 +102,18 @@ router.post('/create', function (req, res, next) {
 router.put('/update', function (req, res, next) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
-    var mAttributes = {
-        name: paramsJson.name,
-        technical_skill: paramsJson.skills,
-        languages: paramsJson.languages,
-    };
     // Request Twioio API.
     try {
         client.taskrouter.v1
             .workspaces(workspaceSid)
-            .workers(paramsJson.sid)
+            .taskQueues(paramsJson.sid)
             .update({
-                friendlyName: paramsJson.name,
-                activityName: paramsJson.activity,
-                attributes: JSON.stringify(mAttributes),
-            })
+                friendly_name: paramsJson.task_queue_key+'-'+paramsJson.task_queue_val,
+                max_reserved_workers: paramsJson.max_reserved_worker,
+                target_workers: paramsJson.task_queue_key+' HAS "'+paramsJson.task_queue_val+'"',
+                })
             .then(
-                worker =>
+                taskQueue =>
                 {
                     res.send({ status: "OK" });
                 }
@@ -128,7 +132,7 @@ router.delete('/:sid', function (req, res, next) {
     try {
         client.taskrouter.v1
             .workspaces(workspaceSid)
-            .workers(req.params.sid)
+            .taskQueues(req.params.sid)
             .remove();
         res.send({ status: "OK" });
     } catch (error) {
