@@ -105,7 +105,7 @@ router.put('/update', function (req, res, next) {
             .workers(paramsJson.sid)
             .update({
                 friendlyName: paramsJson.name,
-                activityName: paramsJson.activity,
+                activitySid: paramsJson.activity,
                 attributes: JSON.stringify(mAttributes),
             })
             .then(

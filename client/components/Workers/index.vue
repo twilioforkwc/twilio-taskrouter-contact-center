@@ -36,7 +36,7 @@
             </el-table>
 
             <div style="width: 100%; padding: 10px; text-align: left;">
-                <el-button type="primary" @click="handleCreate()">オペーレーターを追加</el-button>
+                <el-button type="primary" @click="handleCreate()" size="mini">オペーレーターを追加</el-button>
             </div>
 
         </div>

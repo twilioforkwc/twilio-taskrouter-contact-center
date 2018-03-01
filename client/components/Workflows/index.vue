@@ -40,7 +40,7 @@
             </el-table>
 
             <div style="width: 100%; padding: 10px; text-align: left;">
-                <el-button type="primary" @click="handleCreate()"><i class="el-icon-plus"></i></el-button>
+                <el-button size="mini" type="primary" @click="handleCreate()"><i class="el-icon-plus"></i></el-button>
             </div>
 
         </div>

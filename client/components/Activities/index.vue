@@ -3,25 +3,20 @@
         <h1>{{ title }}</h1>
         <div style="margin: 10px 0;">
             
-            <el-table :data="task_queue_datas" style="width: 100%">
-                <el-table-column label="タスクキュー">
+            <el-table :data="activities" style="width: 100%">
+                <el-table-column label="アクティビティ">
                     <template slot-scope="scope">
                         <span>{{ scope.row.friendlyName }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="TOTALTASK">
+                <el-table-column label="SID">
                     <template slot-scope="scope">
-                        <span>0</span>
+                        <span>{{ scope.row.sid }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="MAX RESERVE WORKERS">
+                <el-table-column label="Availability">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.maxReservedWorkers }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="TARGET WORKER EXPRESSION">
-                    <template slot-scope="scope">
-                        <span>{{ scope.row.targetWorkers }}</span>
+                        <span>{{ scope.row.available }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -33,7 +28,7 @@
             </el-table>
 
             <div style="width: 100%; padding: 10px; text-align: left;">
-                <el-button type="primary" @click="handleCreate()" size="mini"><i class="el-icon-plus"></i></el-button>
+                <el-button type="primary" @click="handleCreate()" size="mini">アクティビティを追加</el-button>
             </div>
 
         </div>
@@ -43,57 +38,58 @@
 <script>
 
     import axios from 'axios';
-    import { Notification } from 'element-ui';
+
     export default {
         name: 'Workers',
         data() {
             return {
                 count: 0,
                 value1: 50,
-                title: 'タスクキュー',
-                task_queue_datas: []
+                title: 'アクティビティ管理画面',
+                msg: 'Welcome to Your Vue.js App!!',
+                activities: []
             }
         },
         mounted() {
-            this.getListData();
+            axios.get("/api/twilio/activities")
+                .then(response => {
+                    console.log(response.data[0]);
+                    this.msg = response.data[0].friendlyName
+                    this.activities = response.data;
+                });
         },
         methods: {
             handleCreate: function () {
-                location.href = '/#/taskqueues/create';
+                location.href = '/#/activities/create';
             },
             handleShow: function (index, row_data) {
-                location.href = '/#/taskqueues/'+row_data.sid+'/show';
+                location.href = '/#/activities/'+row_data.sid+'/show';
             },
             handleEdit: function (index, row_data) {
-                location.href = '/#/taskqueues/'+row_data.sid+'/edit';
+                location.href = '/#/activities/'+row_data.sid+'/edit';
             },
             handleDelete: function (index, row_data) {
-                axios.delete("/api/twilio/taskqueues/"+row_data.sid)
+                // location.href = '/#/activities/show';
+                axios.delete("/api/twilio/activities/"+row_data.sid)
                     .then(response => {
                         console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            this.getListData();
+                            location.href = '/#/activities';
                             Notification.success(
                                 {
                                     title: "Success",
-                                    message: "タスクキューを削除しました。"
+                                    message: "アクティビティを削除しました。"
                                 }
                             );
                         } else {
-                            console.log('タスクキューの削除に失敗しました');
+                            console.log('アクティビティの削除に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
-                                    message: "タスクキューの削除に失敗しました"
+                                    message: "アクティビティの削除に失敗しました"
                                 }
                             );
                         }
-                    });
-            },
-            getListData: function () {
-                axios.get("/api/twilio/taskqueues")
-                    .then(response => {
-                        this.task_queue_datas = response.data;
                     });
             }
         }

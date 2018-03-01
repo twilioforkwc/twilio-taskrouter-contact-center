@@ -9,10 +9,10 @@
                 </el-form-item>
                 <el-form-item label="ACTIVITY">
                     <el-select v-model="form.activity">
-                        <el-option label="OFFLINE" value="offline"></el-option>
-                        <el-option label="IDLE" value="idle"></el-option>
-                        <el-option label="BUSY" value="busy"></el-option>
-                        <el-option label="RESERVED" value="reserved"></el-option>
+                        <el-option label="OFFLINE" value="WAf25a704e4a1544098b4f762a60b24649"></el-option>
+                        <el-option label="IDLE" value="WAeb5551de3ed19afee38139300455216f"></el-option>
+                        <el-option label="BUSY" value="WAce43c63a199bc34703461baaf9aa13e8"></el-option>
+                        <el-option label="RESERVED" value="WAfe88f1e0b1bc35f30682bc296067bf00"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="LANGUAGES">

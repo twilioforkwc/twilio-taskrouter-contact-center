@@ -14,6 +14,9 @@ import WorkflowEdit from '../components/Workflows/edit.vue'
 import TaskQueueIndex from '../components/TaskQueues/index.vue'
 import TaskQueueCreate from '../components/TaskQueues/create.vue'
 import TaskQueueEdit from '../components/TaskQueues/edit.vue'
+import ActivitiesIndex from '../components/Activities/index.vue'
+import ActivitiesCreate from '../components/Activities/create.vue'
+import ActivitiesEdit from '../components/Activities/edit.vue'
 
 Vue.use(Router)
 
@@ -32,6 +35,9 @@ export default new Router({
         { path: '/taskqueues', name: 'TaskQueueIndex', component: TaskQueueIndex },
         { path: '/taskqueues/create', name: 'TaskQueueCreate', component: TaskQueueCreate },
         { path: '/taskqueues/:sid/edit', name: 'TaskQueueEdit', component: TaskQueueEdit },
+        { path: '/activities', name: 'ActivitiesIndex', component: ActivitiesIndex },
+        { path: '/activities/create', name: 'ActivitiesCreate', component: ActivitiesCreate },
+        { path: '/activities/:sid/edit', name: 'ActivitiesEdit', component: ActivitiesEdit },
         { path: '/test2', name: 'MyTest2', data: { message: 'weiweihogehoge' }, component: MyTest2 }
     ]
 })

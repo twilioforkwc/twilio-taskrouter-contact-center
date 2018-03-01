@@ -14,6 +14,7 @@ const workers = require('./routes/api/twilio/workers');
 const twiml = require('./routes/api/twilio/twiml');
 const workflows = require('./routes/api/twilio/workflows');
 const queues = require('./routes/api/twilio/taskqueues');
+const activities = require('./routes/api/twilio/activities');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/twilio/workers', workers);
 app.use('/api/twilio/twiml', twiml);
 app.use('/api/twilio/workflows', workflows);
 app.use('/api/twilio/taskqueues', queues);
+app.use('/api/twilio/activities', activities);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

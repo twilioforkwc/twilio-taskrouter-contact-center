@@ -13,6 +13,16 @@
                 <el-form-item label="INPUT VALUE">
                     <el-input v-model="form.task_queue_val"></el-input>
                 </el-form-item>
+                <el-form-item label="RESERVATION ACTIVITY">
+                    <el-select v-model="form.reservation_activity">
+                        <el-option v-for="activity in activities_datas" v-bind:label="activity.friendlyName" v-bind:value="activity.sid"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="ASSIGNMENT ACTIVITY">
+                    <el-select v-model="form.assignment_activity">
+                        <el-option v-for="activity in activities_datas" v-bind:label="activity.friendlyName" v-bind:value="activity.sid"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="MAX RESERVED WORKER">
                     <el-select v-model="form.max_reserved_worker">
                         <el-option label="0" value="0"></el-option>
@@ -51,14 +61,20 @@
                     task_queue_key: '',
                     task_queue_val: '',
                     max_reserved_worker: '',
-                }
+                },
+                activities_datas: [],
             }
+        },
+        mounted() {
+            this.getActivityList();
         },
         methods: {
             onSubmit() {
                 axios.post("/api/twilio/taskqueues/create", JSON.stringify({
                         task_queue_key: this.form.task_queue_key,
                         task_queue_val: this.form.task_queue_val,
+                        reservation_activity: this.form.reservation_activity,
+                        assignment_activity: this.form.assignment_activity,
                         max_reserved_worker: this.form.max_reserved_worker,
                     }))
                     .then(response => {
@@ -85,6 +101,12 @@
             },
             onCancel() {
                 location.href = '/#/taskqueues';
+            },
+            getActivityList: function () {
+                axios.get("/api/twilio/activities")
+                    .then(response => {
+                        this.activities_datas = response.data;
+                    });
             }
         }
     }

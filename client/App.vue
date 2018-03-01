@@ -35,6 +35,12 @@
                                 <el-menu-item index="1-6">タスクキューリスト</el-menu-item>
                             </router-link>
                         </el-menu-item-group>
+                        <el-menu-item-group>
+                            <template slot="title">アクティビティ</template>
+                            <router-link to="/activities">
+                                <el-menu-item index="1-6">アクティビティリスト</el-menu-item>
+                            </router-link>
+                        </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-menu"></i>Super Visor</template>
