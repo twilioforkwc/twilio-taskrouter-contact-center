@@ -13,40 +13,82 @@
                 <el-form-item label="フォールバックURL">
                     <el-input v-model="form.fallbackAssignmentCallbackUrl"></el-input>
                 </el-form-item>
-                <el-form-item label="TASKRESERVATIONTIMEOUT">
+                <el-form-item label="TASK RESERVATION TIMEOUT">
                     <el-input v-model="form.taskReservationTimeout"></el-input>
                 </el-form-item>
                 <template>
                     <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="Edit with UI" name="first">
-                            <!-- <el-form-item label="タスクキューの選択">
-                                <el-input type="textarea" v-model="form.configuration" disabled></el-input>
-                            </el-form-item> -->
                             <template>
-                                <el-form-item label="フィルターラベル">
-                                    <el-input v-model="form.filter_label"></el-input>
-                                </el-form-item>
-                                <el-form-item label="キューの選択">
-                                    <el-select v-model="form.task_queue_sid">
-                                        <el-option v-for="task_queue in task_queue_datas" v-bind:label="task_queue.friendlyName" v-bind:value="task_queue.sid"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item label="始業時間">
-                                    <el-time-select v-model="form.start_time" :picker-options="{ start: '00:00', step: '00:30', end: '24:00' }" placeholder="Select time"> </el-time-select>
-                                </el-form-item>
-                                <el-form-item label="終業時間">
-                                    <el-time-select v-model="form.end_time" :picker-options="{ start: '00:00', step: '00:30', end: '24:00' }" placeholder="Select time"> </el-time-select>
-                                </el-form-item>
-                                <el-form-item label="言語の選択">
-                                    <el-select v-model="form.selected_language" multiple>
-                                        <el-option v-for="task_queue in task_queue_datas" v-if="checkKey(task_queue.friendlyName, 'languages')" v-bind:label="getKey(task_queue.friendlyName)" v-bind:value="getKey(task_queue.friendlyName)"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item label="スキルの選択">
-                                    <el-select v-model="form.selected_skill" multiple>
-                                        <el-option v-for="task_queue in task_queue_datas" v-if="checkKey(task_queue.friendlyName, 'skills')" v-bind:label="getKey(task_queue.friendlyName)" v-bind:value="getKey(task_queue.friendlyName)"></el-option>
-                                    </el-select>
-                                </el-form-item>
+                                <el-row :gutter="20" type="flex" class="row-bg" justify="space-between">
+                                    <el-col :span="12">
+                                        <div class="grid-content">
+                                            <el-form-item label="フィルターラベル">
+                                                <el-input v-model="form.filter_friendly_name"></el-input>
+                                            </el-form-item>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <div class="grid-content">
+                                            <el-form-item label="キューの選択">
+                                                <el-select v-model="form.task_queue_sid">
+                                                    <el-option v-for="task_queue in task_queue_datas"
+                                                               v-bind:label="task_queue.friendlyName"
+                                                               v-bind:value="task_queue.sid">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                                <el-row :gutter="20" type="flex" class="row-bg" justify="space-between">
+                                    <el-col :span="6">
+                                        <div class="grid-content">
+                                            <el-form-item label="始業時間">
+                                                <el-time-select v-model="form.start_time"
+                                                                :picker-options="{ start: '00:00', step: '00:30', end: '24:00' }"
+                                                                placeholder="Select time">
+                                                </el-time-select>
+                                            </el-form-item>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <div class="grid-content">
+                                            <el-form-item label="終業時間">
+                                                <el-time-select v-model="form.end_time"
+                                                                :picker-options="{ start: '00:00', step: '00:30', end: '24:00' }"
+                                                                placeholder="Select time">
+                                                </el-time-select>
+                                            </el-form-item>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <div class="grid-content">
+                                            <el-form-item label="言語の選択">
+                                                <el-select v-model="form.selected_language" multiple>
+                                                    <el-option v-for="task_queue in task_queue_datas"
+                                                               v-if="checkKey(task_queue.friendlyName, 'languages')"
+                                                               v-bind:label="getKey(task_queue.friendlyName)"
+                                                               v-bind:value="getKey(task_queue.friendlyName)">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <div class="grid-content">
+                                            <el-form-item label="スキルの選択">
+                                                <el-select v-model="form.selected_skill" multiple>
+                                                    <el-option v-for="task_queue in task_queue_datas"
+                                                               v-if="checkKey(task_queue.friendlyName, 'skills')"
+                                                               v-bind:label="getKey(task_queue.friendlyName)"
+                                                               v-bind:value="getKey(task_queue.friendlyName)">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </div>
+                                    </el-col>
+                                </el-row>
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="View as JSON" name="second">
@@ -101,7 +143,7 @@
                         fallbackAssignmentCallbackUrl: this.form.fallbackAssignmentCallbackUrl,
                         taskReservationTimeout: this.form.taskReservationTimeout,
                         task_queue_sid: this.form.task_queue_sid,
-                        filterLabel: this.form.task_queue_sid,
+                        filterFriendlyName: this.form.filter_friendly_name,
                         startTime: this.form.start_time,
                         endTime: this.form.end_time,
                         selectedLanguage: this.form.selected_language,
@@ -137,14 +179,22 @@
                     .then(response => {
                         // console.log(response.data.status);
                         if (response.data.status === 'OK') {
+                            var filter = response.data.filters[0];
                             this.form.name = response.data.friendlyName;
                             this.form.sid = response.data.sid;
                             this.form.assignmentCallbackUrl = response.data.assignmentCallbackUrl;
                             this.form.fallbackAssignmentCallbackUrl = response.data.fallbackAssignmentCallbackUrl;
                             this.form.taskReservationTimeout = response.data.taskReservationTimeout;
-                            this.form.configuration = JSON.stringify(response.data.configuration, null, "    ");
+                            this.form.configuration = JSON.stringify(JSON.parse(response.data.configuration), null, "    ");
                             this.form.dateCreated = response.data.dateCreated;
                             this.form.dateUpdated = response.data.dateUpdated;
+                            this.form.filter_friendly_name = filter.filter_friendly_name;
+                            this.form.task_queue_sid = filter.queue;
+                            this.form.start_time = filter.start_time;
+                            this.form.end_time = filter.end_time;
+                            this.form.selected_language = filter.selected_languages;
+                            this.form.selected_skill = filter.selected_skills;
+                            console.log(response.data.filters);
                         } else {
                             // console.log('ワークフロー情報の取得に失敗しました');
                             Notification.error(
@@ -194,5 +244,11 @@
     }
     .el-form-item__content {
         text-align: left;
+    }
+    .el-date-editor.el-input, .el-date-editor.el-input__inner {
+        width: 100%;
+    }
+    .el-select {
+        width: 100%;
     }
 </style>

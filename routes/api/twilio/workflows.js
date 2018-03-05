@@ -48,7 +48,11 @@ router.get('/show/:sid', function (req, res, next) {
             .workflows(req.params.sid)
             .fetch()
             .then((workflow) => {
-                console.log(workflow.friendlyName)
+                console.log('console ready.');
+                console.log(workflow.configuration);
+                console.log('console end.');
+                var filters = parseFiltersToArrayFromJson(workflow.configuration);
+                // exit;
                 res.send({
                     status: "OK",
                     friendlyName: workflow.friendlyName,
@@ -57,6 +61,7 @@ router.get('/show/:sid', function (req, res, next) {
                     fallbackAssignmentCallbackUrl: workflow.fallbackAssignmentCallbackUrl,
                     taskReservationTimeout: workflow.taskReservationTimeout,
                     configuration: workflow.configuration,
+                    filters: filters,
                     dateCreated: workflow.dateCreated,
                     dateUpdated: workflow.dateUpdated,
                 });
@@ -65,6 +70,53 @@ router.get('/show/:sid', function (req, res, next) {
         res.send({ status: "NG" });
     }
 });
+
+function parseFiltersToArrayFromJson(jsonFilters) {
+    console.log('STARTSTARTSTARTSTARTSTARTSTART');
+    var filters = [];
+    // console.log(JSON.parse(jsonFilters));
+    // exit;
+    JSON.parse(jsonFilters).task_routing.filters.forEach(function(filter, i){
+        var tmpObject = {};
+        var languages = [];
+        var skills = [];
+        var startTime, endTime;
+        // console.log(filter);
+        tmpObject.filter_friendly_name = filter.filter_friendly_name;
+        tmpObject.queue = filter.targets[0].queue;
+        // tmpObject.expressions.languages = [];
+        // tmpObject.expressions.skills = [];
+        console.log(tmpObject.queue);
+        // console.log(filter.expression.split(' OR\n ')[0]);
+        filter.expression.split(' OR\n ').forEach(function(dataOr, i){
+            dataOr = dataOr.replace(/\(/g,"");
+            dataOr = dataOr.replace(/\)/g,"");
+            // console.log(data );
+            dataOr.split(' AND\n ').forEach(function(dataAnd, i){
+                if (dataAnd.indexOf('taskrouter.currentTime') != -1) {
+                    startTime = dataAnd.split(' AND ')[0].split(' > ')[1];
+                    endTime = dataAnd.split(' AND ')[1].split(' < ')[1];
+                } else {
+                    if (dataAnd.indexOf('language') != -1) {
+                        languages.push(dataAnd.split(' == ')[1].replace(/\'/g,""));
+                    } else {
+                        skills.push(dataAnd.split(' == ')[1].replace(/\'/g,""));
+                    }
+                }
+            });
+        });
+        // .replace(/:/g,"")
+        // console.log(tmpObject.filter_friendly_name);
+        tmpObject.selected_languages = languages;
+        tmpObject.selected_skills = skills;
+        tmpObject.start_time = startTime.substr(0,2)+":"+startTime.substr(2,2);
+        tmpObject.end_time = endTime.substr(0,2)+":"+endTime.substr(2,2);
+        // console.log(languages);
+        filters.push(tmpObject);
+    });
+    console.log('ENDENDENDENDENDENDENDENDENDEND');
+    return filters;
+};
 
 /**
  * Worker追加API
