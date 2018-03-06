@@ -109,14 +109,6 @@
                             document.getElementById('button-call').style.display = 'none';
                             document.getElementById('button-pickup').style.display = 'inline';
                             tmpConnect = conn;
-                            // var archEnemyPhoneNumber = '+12099517118'; 
-                            // if (conn.parameters.From === archEnemyPhoneNumber) {
-                            //     conn.reject();
-                            //     log('It\'s your nemesis. Rejected call.');
-                            // } else {
-                            //     // accept the incoming connection and start two-way audio
-                            //     conn.accept();
-                            // }
                         });
 
                         setClientNameUI(response.data.identity);
