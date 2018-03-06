@@ -17,6 +17,7 @@ import TaskQueueEdit from '../components/TaskQueues/edit.vue'
 import ActivitiesIndex from '../components/Activities/index.vue'
 import ActivitiesCreate from '../components/Activities/create.vue'
 import ActivitiesEdit from '../components/Activities/edit.vue'
+import OperatorsShow from '../components/Operators/show.vue'
 
 Vue.use(Router)
 
@@ -38,6 +39,7 @@ export default new Router({
         { path: '/activities', name: 'ActivitiesIndex', component: ActivitiesIndex },
         { path: '/activities/create', name: 'ActivitiesCreate', component: ActivitiesCreate },
         { path: '/activities/:sid/edit', name: 'ActivitiesEdit', component: ActivitiesEdit },
+        { path: '/operators/:sid/show', name: 'OperatorsShow', component: OperatorsShow },
         { path: '/test2', name: 'MyTest2', data: { message: 'weiweihogehoge' }, component: MyTest2 }
     ]
 })

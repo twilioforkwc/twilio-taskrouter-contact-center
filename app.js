@@ -1,7 +1,3 @@
-// if (process.env.NODE_ENV !== 'test') {
-//   require('dotenv-safe').load();
-// }
-
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -15,6 +11,7 @@ const twiml = require('./routes/api/twilio/twiml');
 const workflows = require('./routes/api/twilio/workflows');
 const queues = require('./routes/api/twilio/taskqueues');
 const activities = require('./routes/api/twilio/activities');
+const capabilities = require('./routes/api/twilio/capabilities');
 
 const app = express();
 
@@ -31,6 +28,7 @@ app.use('/api/twilio/twiml', twiml);
 app.use('/api/twilio/workflows', workflows);
 app.use('/api/twilio/taskqueues', queues);
 app.use('/api/twilio/activities', activities);
+app.use('/api/twilio/capabilities', capabilities);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
