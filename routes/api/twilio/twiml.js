@@ -1,13 +1,11 @@
-// import { workers, worker } from 'cluster';
-
 const express = require('express');
 const router = express.Router();
 
-require('dotenv').config();
+const config = require('./config');
 
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.AUTH_TOKEN;
-const workspaceSid = process.env.WORKSPACE_SID;
+const accountSid = config.TWILIO_ACCOUNT_SID;
+const authToken = config.TWILIO_AUTH_TOKEN;
+const workspaceSid = config.TWILIO_TASKROUTER_WORKSPACE_SID;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const client = require('twilio')(accountSid, authToken);
 var lang_list = {
@@ -226,95 +224,6 @@ function _getWorkerList() {
             // res.send(JSON.stringify(result));
         });
 }
-
-// /**
-//  * Worker詳細API
-//  */
-// router.get('/show/:sid', function (req, res, next) {
-//     // Request Twioio API.
-//     try {
-//         client.taskrouter.v1
-//             .workspaces(workspaceSid)
-//             .workers(req.params.sid)
-//             .fetch()
-//             .then(worker => {
-//                 res.send({
-//                     status: "OK",
-//                     friendlyName: worker.friendlyName,
-//                     activityName: worker.activityName,
-//                     attributes: worker.attributes
-//                 });
-//             });
-//     } catch (error) {
-//         res.send({ status: "NG" });
-//     }
-// });
-
-// /**
-//  * Worker追加API
-//  */
-// router.post('/create', function (req, res, next) {
-//     // Parse json text.
-//     paramsJson = parseRequestParameter(req);
-
-//     // Request Twioio API.
-//     try {
-//         client.taskrouter.v1.workspaces(workspaceSid).workers.create({
-//             friendlyName: paramsJson.name,
-//             activityName: paramsJson.activity,
-//             attributes: paramsJson.attributes,
-//         }).then(reseult => {
-//             res.send({ status: "OK" });
-//         });
-//     } catch (error) {
-//         res.send({ status: "NG" });
-//     }
-// });
-
-// /**
-//  * Worker更新API
-//  */
-// router.put('/update', function (req, res, next) {
-//     // Parse json text.
-//     paramsJson = parseRequestParameter(req);
-//     // Request Twioio API.
-//     try {
-//         client.taskrouter.v1
-//             .workspaces(workspaceSid)
-//             .workers(paramsJson.sid)
-//             .update({
-//                 friendlyName: paramsJson.name,
-//                 activityName: paramsJson.activity,
-//                 attributes: paramsJson.attributes
-//             })
-//             .then(
-//                 worker =>
-//                 {
-//                     res.send({ status: "OK" });
-//                 }
-//             );
-//     } catch (error) {
-//         console.log(error);
-//         res.send({ status: "NG" });
-//     }
-// });
-
-// /**
-//  * Worker削除API
-//  */
-// router.delete('/:sid', function (req, res, next) {
-//     // Request Twioio API.
-//     try {
-//         client.taskrouter.v1
-//             .workspaces(workspaceSid)
-//             .workers(req.params.sid)
-//             .remove();
-//         res.send({ status: "OK" });
-//     } catch (error) {
-//         console.log(error);
-//         res.send({ status: "NG" });
-//     }
-// });
 
 function parseRequestParameter (req) {
     // GET Request parameters.

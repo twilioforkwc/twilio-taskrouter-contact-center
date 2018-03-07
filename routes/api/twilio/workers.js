@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-require('dotenv').config();
+const config = require('./config');
 
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.AUTH_TOKEN;
-const workspaceSid = process.env.WORKSPACE_SID;
+const accountSid = config.TWILIO_ACCOUNT_SID;
+const authToken = config.TWILIO_AUTH_TOKEN;
+const workspaceSid = config.TWILIO_TASKROUTER_WORKSPACE_SID;
 const client = require('twilio')(accountSid, authToken);
 
 /**

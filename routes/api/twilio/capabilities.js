@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-require('dotenv').config();
+const config = require('./config');
 
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.AUTH_TOKEN;
-const twimlAppSid= process.env.TWIML_APP_SID;
+const accountSid = config.TWILIO_ACCOUNT_SID;
+const authToken = config.TWILIO_AUTH_TOKEN;
+const twimlAppSid = config.TWILIO_TWIML_APP_SID;
 const ClientCapability = require('twilio').jwt.ClientCapability;
 
 /**
@@ -13,6 +13,7 @@ const ClientCapability = require('twilio').jwt.ClientCapability;
  */
 router.get('/generateToken/:sid', function (req, res, next) {
     const identity = req.params.sid;
+    // res.send('test'+authToken);
     const capability = new ClientCapability({
         accountSid: accountSid,
         authToken: authToken,

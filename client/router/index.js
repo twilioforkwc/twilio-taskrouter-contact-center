@@ -18,6 +18,7 @@ import ActivitiesIndex from '../components/Activities/index.vue'
 import ActivitiesCreate from '../components/Activities/create.vue'
 import ActivitiesEdit from '../components/Activities/edit.vue'
 import OperatorsShow from '../components/Operators/show.vue'
+import SVMonitor from '../components/SuperVisors/monitor.vue'
 
 Vue.use(Router)
 
@@ -40,6 +41,7 @@ export default new Router({
         { path: '/activities/create', name: 'ActivitiesCreate', component: ActivitiesCreate },
         { path: '/activities/:sid/edit', name: 'ActivitiesEdit', component: ActivitiesEdit },
         { path: '/operators/:sid/show', name: 'OperatorsShow', component: OperatorsShow },
+        { path: '/sv/monitor', name: 'SVMonitor', component: SVMonitor },
         { path: '/test2', name: 'MyTest2', data: { message: 'weiweihogehoge' }, component: MyTest2 }
     ]
 })

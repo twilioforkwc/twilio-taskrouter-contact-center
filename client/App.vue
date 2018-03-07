@@ -45,17 +45,19 @@
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-menu"></i>Super Visor</template>
                         <el-menu-item-group>
-                            <template slot="title">Group 1</template>
-                            <el-menu-item index="2-1">Option 1</el-menu-item>
-                            <el-menu-item index="2-2">Option 2</el-menu-item>
+                            <template slot="title">スーパーバイザー</template>
+                            <router-link to="/sv/monitor">
+                                <el-menu-item index="2-1"><i class="el-icon-tv"></i>モニター</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i>Agent</template>
                         <el-menu-item-group>
-                            <template slot="title">Group 1</template>
-                            <el-menu-item index="3-1">Option 1</el-menu-item>
-                            <el-menu-item index="3-2">Option 2</el-menu-item>
+                            <template slot="title">エージェント</template>
+                            <router-link to="/operators/Mr.Rabbit/show">
+                                <el-menu-item index="3-1">Mr.Rabbit</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
