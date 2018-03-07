@@ -148,97 +148,97 @@
     }
 
 
-$(function () {
-    var speakerDevices = document.getElementById('speaker-devices');
-    var ringtoneDevices = document.getElementById('ringtone-devices');
-    var outputVolumeBar = document.getElementById('output-volume');
-    var inputVolumeBar = document.getElementById('input-volume');
-    var volumeIndicators = document.getElementById('volume-indicators');
-    // Bind button to make call
-    document.getElementById('button-call').onclick = function () {
-        // get the phone number to connect the call to
-        var params = {
-            To: document.getElementById('phone-number').value
-        };
+// $(function () {
+//     var speakerDevices = document.getElementById('speaker-devices');
+//     var ringtoneDevices = document.getElementById('ringtone-devices');
+//     var outputVolumeBar = document.getElementById('output-volume');
+//     var inputVolumeBar = document.getElementById('input-volume');
+//     var volumeIndicators = document.getElementById('volume-indicators');
+//     // Bind button to make call
+//     document.getElementById('button-call').onclick = function () {
+//         // get the phone number to connect the call to
+//         var params = {
+//             To: document.getElementById('phone-number').value
+//         };
 
-        console.log('Calling ' + params.To + '...');
-        Twilio.Device.connect(params);
-    };
+//         console.log('Calling ' + params.To + '...');
+//         Twilio.Device.connect(params);
+//     };
 
-    // Bind button to hangup call
-    document.getElementById('button-hangup').onclick = function () {
-        log('Hanging up...');
-        Twilio.Device.disconnectAll();
-    };
+//     // Bind button to hangup call
+//     document.getElementById('button-hangup').onclick = function () {
+//         log('Hanging up...');
+//         Twilio.Device.disconnectAll();
+//     };
 
-    // Bind button to pick up the call
-    document.getElementById('button-pickup').onclick = function () {
-        log('Answered...');
-        // Twilio.Device.disconnectAll();
-        tmpConnect.accept();
-    };
+//     // Bind button to pick up the call
+//     document.getElementById('button-pickup').onclick = function () {
+//         log('Answered...');
+//         // Twilio.Device.disconnectAll();
+//         tmpConnect.accept();
+//     };
 
-    document.getElementById('get-devices').onclick = function () {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(updateAllDevices);
-    };
+//     document.getElementById('get-devices').onclick = function () {
+//         navigator.mediaDevices.getUserMedia({ audio: true })
+//             .then(updateAllDevices);
+//     };
 
-    speakerDevices.addEventListener('change', function () {
-        var selectedDevices = [].slice.call(speakerDevices.children)
-            .filter(function (node) { return node.selected; })
-            .map(function (node) { return node.getAttribute('data-id'); });
+//     speakerDevices.addEventListener('change', function () {
+//         var selectedDevices = [].slice.call(speakerDevices.children)
+//             .filter(function (node) { return node.selected; })
+//             .map(function (node) { return node.getAttribute('data-id'); });
 
-        Twilio.Device.audio.speakerDevices.set(selectedDevices);
-    });
+//         Twilio.Device.audio.speakerDevices.set(selectedDevices);
+//     });
 
-    ringtoneDevices.addEventListener('change', function () {
-        var selectedDevices = [].slice.call(ringtoneDevices.children)
-            .filter(function (node) { return node.selected; })
-            .map(function (node) { return node.getAttribute('data-id'); });
+//     ringtoneDevices.addEventListener('change', function () {
+//         var selectedDevices = [].slice.call(ringtoneDevices.children)
+//             .filter(function (node) { return node.selected; })
+//             .map(function (node) { return node.getAttribute('data-id'); });
 
-        Twilio.Device.audio.ringtoneDevices.set(selectedDevices);
-    });
+//         Twilio.Device.audio.ringtoneDevices.set(selectedDevices);
+//     });
 
-    function updateAllDevices() {
-        updateDevices(speakerDevices, Twilio.Device.audio.speakerDevices.get());
-        updateDevices(ringtoneDevices, Twilio.Device.audio.ringtoneDevices.get());
-    }
-});
-
-
+//     function updateAllDevices() {
+//         updateDevices(speakerDevices, Twilio.Device.audio.speakerDevices.get());
+//         updateDevices(ringtoneDevices, Twilio.Device.audio.ringtoneDevices.get());
+//     }
+// });
 
 
-    // Update the available ringtone and speaker devices
-    function updateDevices(selectEl, selectedDevices) {
-        selectEl.innerHTML = '';
-        Twilio.Device.audio.availableOutputDevices.forEach(function (device, id) {
-            var isActive = (selectedDevices.size === 0 && id === 'default');
-            selectedDevices.forEach(function (device) {
-                if (device.deviceId === id) { isActive = true; }
-            });
 
-            var option = document.createElement('option');
-            option.label = device.label;
-            option.setAttribute('data-id', id);
-            if (isActive) {
-                option.setAttribute('selected', 'selected');
-            }
-            selectEl.appendChild(option);
-        });
-    }
 
-    // Activity log
-    function log(message) {
-        var logDiv = document.getElementById('log');
-        logDiv.innerHTML += '<p>&gt;&nbsp;' + message + '</p>';
-        logDiv.scrollTop = logDiv.scrollHeight;
-    }
+//     // Update the available ringtone and speaker devices
+//     function updateDevices(selectEl, selectedDevices) {
+//         selectEl.innerHTML = '';
+//         Twilio.Device.audio.availableOutputDevices.forEach(function (device, id) {
+//             var isActive = (selectedDevices.size === 0 && id === 'default');
+//             selectedDevices.forEach(function (device) {
+//                 if (device.deviceId === id) { isActive = true; }
+//             });
 
-    // Set the client name in the UI
-    function setClientNameUI(clientName) {
-        var div = document.getElementById('client-name');
-        div.innerHTML = 'Your client name: <strong>' + clientName + '</strong>';
-    }
+//             var option = document.createElement('option');
+//             option.label = device.label;
+//             option.setAttribute('data-id', id);
+//             if (isActive) {
+//                 option.setAttribute('selected', 'selected');
+//             }
+//             selectEl.appendChild(option);
+//         });
+//     }
+
+//     // Activity log
+//     function log(message) {
+//         var logDiv = document.getElementById('log');
+//         logDiv.innerHTML += '<p>&gt;&nbsp;' + message + '</p>';
+//         logDiv.scrollTop = logDiv.scrollHeight;
+//     }
+
+//     // Set the client name in the UI
+//     function setClientNameUI(clientName) {
+//         var div = document.getElementById('client-name');
+//         div.innerHTML = 'Your client name: <strong>' + clientName + '</strong>';
+//     }
 </script>
 
 <style scoped>

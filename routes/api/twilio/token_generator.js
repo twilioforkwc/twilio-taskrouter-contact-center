@@ -25,6 +25,7 @@ router.get('/generate/:sid', function (req, res, next) {
     // Assign the provided identity or generate a new one
     // token.identity = identity || nameGenerator();
     token.identity = req.params.sid;
+    token.identity = 'ミスターラビット';
 
     // Grant the access token Twilio Video capabilities
     const videoGrant = new VideoGrant();
@@ -48,6 +49,7 @@ router.get('/generate/:sid', function (req, res, next) {
         token.addGrant(syncGrant);
     }
     // res.send('test');
+    console.log(token);
 
     // Serialize the token to a JWT string and include it in a JSON response
     // return {
