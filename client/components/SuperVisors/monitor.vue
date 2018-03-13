@@ -29,14 +29,14 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">会話を聞く</el-button>
-                        <el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">会話に参加する</el-button>
+                        <el-button size="mini" type="primary">会話を聞く</el-button>
+                        <el-button size="mini" type="success">会話に参加する</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
             <div style="width: 100%; padding: 10px; text-align: left;">
-                <el-button type="primary" @click="handleCreate()" size="mini">オペーレーターを追加</el-button>
+                <el-button type="primary" size="mini">オペーレーターを追加</el-button>
             </div>
 
         </div>
@@ -93,30 +93,40 @@
                         vueObj.message = 'Sync is live!';
                     }
                 });
-                syncClient.document('LexTechSupport').then(function (syncDoc) {
-                    var data = syncDoc.value;
-                    if (data.board) {
-                        // updateUserInterface(data);
-                    }
-
-                    // Any time the board changes, we want to show the new state. The 'updated'
-                    // event is for this.
-                    syncDoc.on('updated', function (event) {
-                        console.debug("Board was updated", event.isLocal ? "locally." : "by the other guy.");
-                        // updateUserInterface(event.value);
-                    });
-
-                    // Let's make our buttons control the game state in Sync…
-                    $('html').on('click', function (e) {
-                        // Toggle the value: X, O, or empty
-                        // toggleCellValue($(e.target));
-                        console.log(e);
-
-                        // Send updated document to Sync. This will trigger "updated" events for all players.
-                        var data = readGameBoardFromUserInterface();
-                        syncDoc.set(data);
+                syncClient.map('users').then(function (map) {
+                    map.on('itemUpdated', function (args) {
+                        // console.log('key', item.key);
+                        // console.log('JSON data', item.value);
+                        console.log('Map item ' + args.item.key + ' was updated');
+                        console.log('args.item.value:', args.item.value);
+                        console.log('args.isLocal:', args.isLocal);
                     });
                 });
+                // syncClient.document('LexTechSupport').then(function (syncDoc) {
+                //     var data = syncDoc.value;
+                //     if (data.board) {
+                //         // updateUserInterface(data);
+                //         console.log('data.board');
+                //     }
+
+                //     // Any time the board changes, we want to show the new state. The 'updated'
+                //     // event is for this.
+                //     syncDoc.on('updated', function (event) {
+                //         console.debug("Board was updated", event.isLocal ? "locally." : "by the other guy.");
+                //         // updateUserInterface(event.value);
+                //     });
+
+                //     // Let's make our buttons control the game state in Sync…
+                //     $('html').on('click', function (e) {
+                //         // Toggle the value: X, O, or empty
+                //         // toggleCellValue($(e.target));
+                //         // console.log(e);
+
+                //         // Send updated document to Sync. This will trigger "updated" events for all players.
+                //         var data = readGameBoardFromUserInterface();
+                //         // syncDoc.set(data);
+                //     });
+                // });
             },
         }
     }

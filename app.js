@@ -13,6 +13,7 @@ const queues = require('./routes/api/twilio/taskqueues');
 const activities = require('./routes/api/twilio/activities');
 const capabilities = require('./routes/api/twilio/capabilities');
 const tokenGenerator = require('./routes/api/twilio/token_generator');
+const dbFiles = require('./routes/api/db/files');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/twilio/taskqueues', queues);
 app.use('/api/twilio/activities', activities);
 app.use('/api/twilio/capabilities', capabilities);
 app.use('/api/twilio/token_generator', tokenGenerator);
+app.use('/api/db/files', dbFiles);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
