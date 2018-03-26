@@ -124,22 +124,84 @@ function parseFiltersToArrayFromJson(jsonFilters) {
 router.post('/create', function (req, res, next) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
-    var mAttributes = {
-        name: paramsJson.name,
-        technical_skill: paramsJson.skills,
-        languages: paramsJson.languages,
-    };
-
-    // Request Twioio API.
-    try {
-        client.taskrouter.v1.workspaces(workspaceSid).workers.create({
-            friendlyName: paramsJson.name,
-            activityName: paramsJson.activity,
-            attributes: JSON.stringify(mAttributes),
-        }).then(reseult => {
-            res.send({ status: "OK" });
+    // var mAttributes = {
+    //     name: paramsJson.name,
+    //     technical_skill: paramsJson.skills,
+    //     languages: paramsJson.languages,
+    // };
+    // Request Twilio API.
+    console.log(paramsJson.selectedLanguage);
+    var expression = "";
+    if (paramsJson.selectedLanguage.length > 0) {
+        expression = expression + "(";
+        paramsJson.selectedLanguage.forEach(function(lang, i){
+            expression = expression + generateExpression("selected_language", "==", lang);
+            console.log(paramsJson.selectedLanguage.length);
+            console.log(i);
+            if ((i+1)< paramsJson.selectedLanguage.length) {
+                expression = expression + " AND\n ";
+            }
         });
+        expression = expression + ") OR\n ";
+    }
+    if (paramsJson.selectedLanguage.length > 0) {
+        expression = expression + "(";
+        paramsJson.selectedSkill.forEach(function(skill, i){
+            expression = expression + generateExpression("technical_skill", "==", skill);
+            if ((i+1)< paramsJson.selectedSkill.length) {
+                expression = expression + " AND\n ";
+            }
+        });
+        expression = expression + ") OR\n ";
+    }
+    if (paramsJson.startTime && paramsJson.endTime) {
+        expression = expression + "(taskrouter.currentTime > "+paramsJson.startTime.replace(/:/g,"")+" AND taskrouter.currentTime < "+paramsJson.endTime.replace(/:/g,"")+")";
+    }
+    // expression = expression + "\"";
+    console.log(expression);
+    // expression = expression + "(";
+    // expression = expression + ")";
+    var configuration = {
+        "task_routing": {
+            "filters": [
+                {
+                    "targets": [
+                        {
+                            "queue": "WQ9e1ed3f73b3bfb8630fb0053d7f1427c"
+                        }
+                    ],
+                    "filter_friendly_name": "Language - English",
+                    "expression": expression
+                }
+            ],
+            "default_filter": {
+                "queue": "WQ9e1ed3f73b3bfb8630fb0053d7f1427c"
+            }
+        }
+    }
+    console.log(configuration);
+    // exit;
+
+    try {
+        client.taskrouter.v1
+            .workspaces(workspaceSid)
+            .workflows
+            .create({
+                friendlyName: paramsJson.friendlyName,
+                assignmentCallbackUrl: paramsJson.assignmentCallbackUrl,
+                fallbackAssignmentCallbackUrl: paramsJson.fallbackAssignmentCallbackUrl,
+                taskReservationTimeout: paramsJson.taskReservationTimeout,
+                configuration: JSON.stringify(configuration),
+                // attributes: JSON.stringify(mAttributes),
+            })
+            .then(
+                worker =>
+                {
+                    res.send({ status: "OK" });
+                }
+            );
     } catch (error) {
+        console.log(error);
         res.send({ status: "NG" });
     }
 });

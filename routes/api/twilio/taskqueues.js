@@ -65,10 +65,17 @@ router.post('/create', function (req, res, next) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
 
+    console.log("########################");
+    console.log(paramsJson.task_queue_key);
+    console.log(paramsJson.task_queue_val);
+    console.log(paramsJson.reservation_activity);
+    console.log(paramsJson.assignment_activity);
+    console.log("########################");
+
     // Request Twioio API.
     try {
         client.taskrouter.v1.workspaces(workspaceSid).taskQueues.create({
-            friendlyName: paramsJson.task_queue_key+'-'+paramsJson.task_queue_val,
+            friendlyName: paramsJson.task_queue_key + '-' + paramsJson.task_queue_val,
             reservationActivitySid: paramsJson.reservation_activity,
             assignmentActivitySid: paramsJson.assignment_activity,
             maxReservedWorkers: paramsJson.max_reserved_worker,
