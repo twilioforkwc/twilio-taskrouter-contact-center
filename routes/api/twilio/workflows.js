@@ -167,15 +167,15 @@ router.post('/create', function (req, res, next) {
                 {
                     "targets": [
                         {
-                            "queue": "WQ9e1ed3f73b3bfb8630fb0053d7f1427c"
+                            "queue": paramsJson.task_queue_sid
                         }
                     ],
-                    "filter_friendly_name": "Language - English",
+                    "filter_friendly_name": paramsJson.filterFriendlyName,
                     "expression": expression
                 }
             ],
             "default_filter": {
-                "queue": "WQ9e1ed3f73b3bfb8630fb0053d7f1427c"
+                "queue": paramsJson.task_queue_sid
             }
         }
     }
@@ -255,15 +255,15 @@ router.put('/update', function (req, res, next) {
                 {
                     "targets": [
                         {
-                            "queue": "WQ9e1ed3f73b3bfb8630fb0053d7f1427c"
+                            "queue": paramsJson.task_queue_sid
                         }
                     ],
-                    "filter_friendly_name": "Language - English",
+                    "filter_friendly_name": paramsJson.filterFriendlyName,
                     "expression": expression
                 }
             ],
             "default_filter": {
-                "queue": "WQ9e1ed3f73b3bfb8630fb0053d7f1427c"
+                "queue": paramsJson.task_queue_sid
             }
         }
     }
