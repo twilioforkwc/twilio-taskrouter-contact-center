@@ -15,13 +15,13 @@ var lang_list = {
     ch: { say: "中国語の方は4を押すか、中国語といってください。"},
 };
 var skill_list = {
-    csharp: { say: "シーシャープの方は1を教えてください。"},
-    curl:   { say: "カールの方は2を教えてください。"},
-    java:   { say: "ジャバの方は3を教えてください。"},
-    nodejs: { say: "ノードジェイエスの方は4を教えてください。"},
-    php:    { say: "ピーエイチピーの方は5を教えてください。"},
-    python: { say: "パイソンの方は6を教えてください。"},
-    ruby:   { say: "ルビーの方は7を教えてください。"},
+    csharp: { say: "シーシャープの方は1を押してください。"},
+    curl:   { say: "カールの方は2を押してください。"},
+    java:   { say: "ジャバの方は3を押してください。"},
+    nodejs: { say: "ノードジェイエスの方は4を押してください。"},
+    php:    { say: "ピーエイチピーの方は5を押してください。"},
+    python: { say: "パイソンの方は6を押してください。"},
+    ruby:   { say: "ルビーの方は7を押してください。"},
 };
 
 
@@ -171,7 +171,7 @@ router.get('/voices/ivr', function (req, res, next) {
 /**
  * IVR voice response url.
  */
-router.post('/voices/enqueuecall', function (req, res, next) {
+router.post('/voices/enqueue', function (req, res, next) {
     res.header('Content-Type', 'application/xml; charset=utf-8')
 
     var digit_pressed = req.params.Digits;
@@ -186,7 +186,7 @@ router.post('/voices/enqueuecall', function (req, res, next) {
     const response = new VoiceResponse();
     const task = '<Task>{"selected_language": "'+language+'"}</Task>';
     response.enqueue({
-        workflowSid: 'WW0123401234...'
+        workflowSid: 'WW3e2ae21a46928e5239de5020e5afcf04'
     }, task);
 
     res.send(response.toString());
