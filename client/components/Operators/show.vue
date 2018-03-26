@@ -39,6 +39,7 @@
     //Our interface to the Sync service
     var syncClient;
     var vueObj;
+    var agentSid;
 
     export default {
         name: 'HelloWorld',
@@ -49,10 +50,11 @@
         },
         mounted() {
             this.getToken();
+            agentSid = this.$route.params.sid;
         },
         methods: {
             getToken: function() {
-                axios.get("/api/twilio/token_generator/generate/supervisor")
+                axios.get("/api/twilio/token_generator/generate/"+this.$route.params.sid)
                     .then(response => {
                         // Twilio.Device.setup(response.data.token);
                         this.listenSyncClient(response);
@@ -69,13 +71,16 @@
                         Twilio.Device.ready(function (device) {
                             log('Twilio.Device Ready!');
                             document.getElementById('call-controls').style.display = 'block';
+                            updateSyncClient('待機中', null);
                         });
                         Twilio.Device.error(function (error) {
                             log('Twilio.Device Error: ' + error.message);
+                            updateSyncClient(error.message, null);
                         });
 
                         Twilio.Device.connect(function (conn) {
                             log('Successfully established call!');
+                            updateSyncClient('通話中', conn.sid);
                             document.getElementById('button-call').style.display = 'none';
                             document.getElementById('button-pickup').style.display = 'none';
                             document.getElementById('button-hangup').style.display = 'inline';
@@ -110,6 +115,7 @@
                             document.getElementById('button-hangup').style.display = 'none';
                             document.getElementById('button-pickup').style.display = 'none';
                             volumeIndicators.style.display = 'none';
+                            updateSyncClient('待機中', conn.sid);
                         });
 
                         Twilio.Device.incoming(function (conn) {
@@ -117,8 +123,10 @@
                             document.getElementById('button-call').style.display = 'none';
                             document.getElementById('button-pickup').style.display = 'inline';
                             tmpConnect = conn;
+                            updateSyncClient('着信中');
                         });
 
+                        console.log(response.data);
                         setClientNameUI(response.data.identity);
 
                         // Twilio.Device.audio.on('deviceChange', updateAllDevices);
@@ -167,123 +175,86 @@
                         vueObj.message = 'Sync is live!';
                     }
                 });
-                syncClient.map('users').then(function (map) {
-                    map.set('Mr.Rabbit', {
-                        phone_number: 12345678,
-                        country: 'JP'
-                    }).then(function (item) {
-                        console.log('Added: ', item.key);
-                    }).catch(function (err) {
-                        console.error(err);
-                    });
-                    syncClient.map('users').then(function (map) {
-                        map.update('Mr.rabbit', { country: "IRL" });
-                    });
-                });
             },
         }
     }
 
     $(function () {
-        $('html').on('click', function(){
-            syncClient.map('users').then(function (map) {
-                map.update('Mr.rabbit', { country: "IRL" });
-            });
+
+        var speakerDevices = document.getElementById('speaker-devices');
+        var ringtoneDevices = document.getElementById('ringtone-devices');
+        var outputVolumeBar = document.getElementById('output-volume');
+        var inputVolumeBar = document.getElementById('input-volume');
+        var volumeIndicators = document.getElementById('volume-indicators');
+        // Bind button to make call
+        document.getElementById('button-call').onclick = function () {
+            // get the phone number to connect the call to
+            var params = {
+                To: document.getElementById('phone-number').value
+            };
+
+            console.log('Calling ' + params.To + '...');
+            Twilio.Device.connect(params);
+        };
+
+        // Bind button to hangup call
+        document.getElementById('button-hangup').onclick = function () {
+            log('Hanging up...');
+            Twilio.Device.disconnectAll();
+        };
+
+        // Bind button to pick up the call
+        document.getElementById('button-pickup').onclick = function () {
+            log('Answered...');
+            // Twilio.Device.disconnectAll();
+            tmpConnect.accept();
+        };
+
+        document.getElementById('get-devices').onclick = function () {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(updateAllDevices);
+        };
+
+        speakerDevices.addEventListener('change', function () {
+            var selectedDevices = [].slice.call(speakerDevices.children)
+                .filter(function (node) { return node.selected; })
+                .map(function (node) { return node.getAttribute('data-id'); });
+
+            Twilio.Device.audio.speakerDevices.set(selectedDevices);
         });
+
+        ringtoneDevices.addEventListener('change', function () {
+            var selectedDevices = [].slice.call(ringtoneDevices.children)
+                .filter(function (node) { return node.selected; })
+                .map(function (node) { return node.getAttribute('data-id'); });
+
+            Twilio.Device.audio.ringtoneDevices.set(selectedDevices);
+        });
+
+        function updateAllDevices() {
+            updateDevices(speakerDevices, Twilio.Device.audio.speakerDevices.get());
+            updateDevices(ringtoneDevices, Twilio.Device.audio.ringtoneDevices.get());
+        }
     });
 
-// $(function () {
+    function updateSyncClient(status, call_sid) {
+        syncClient.map('users').then(function (map) {
+            map.update(agentSid, { status: status });
+        });
+    }
 
-//     var speakerDevices = document.getElementById('speaker-devices');
-//     var ringtoneDevices = document.getElementById('ringtone-devices');
-//     var outputVolumeBar = document.getElementById('output-volume');
-//     var inputVolumeBar = document.getElementById('input-volume');
-//     var volumeIndicators = document.getElementById('volume-indicators');
-//     // Bind button to make call
-//     document.getElementById('button-call').onclick = function () {
-//         // get the phone number to connect the call to
-//         var params = {
-//             To: document.getElementById('phone-number').value
-//         };
+    // Activity log
+    function log(message) {
+        var logDiv = document.getElementById('log');
+        logDiv.innerHTML += '<p>&gt;&nbsp;' + message + '</p>';
+        logDiv.scrollTop = logDiv.scrollHeight;
+    }
 
-//         console.log('Calling ' + params.To + '...');
-//         Twilio.Device.connect(params);
-//     };
-
-//     // Bind button to hangup call
-//     document.getElementById('button-hangup').onclick = function () {
-//         log('Hanging up...');
-//         Twilio.Device.disconnectAll();
-//     };
-
-//     // Bind button to pick up the call
-//     document.getElementById('button-pickup').onclick = function () {
-//         log('Answered...');
-//         // Twilio.Device.disconnectAll();
-//         tmpConnect.accept();
-//     };
-
-//     document.getElementById('get-devices').onclick = function () {
-//         navigator.mediaDevices.getUserMedia({ audio: true })
-//             .then(updateAllDevices);
-//     };
-
-//     speakerDevices.addEventListener('change', function () {
-//         var selectedDevices = [].slice.call(speakerDevices.children)
-//             .filter(function (node) { return node.selected; })
-//             .map(function (node) { return node.getAttribute('data-id'); });
-
-//         Twilio.Device.audio.speakerDevices.set(selectedDevices);
-//     });
-
-//     ringtoneDevices.addEventListener('change', function () {
-//         var selectedDevices = [].slice.call(ringtoneDevices.children)
-//             .filter(function (node) { return node.selected; })
-//             .map(function (node) { return node.getAttribute('data-id'); });
-
-//         Twilio.Device.audio.ringtoneDevices.set(selectedDevices);
-//     });
-
-//     function updateAllDevices() {
-//         updateDevices(speakerDevices, Twilio.Device.audio.speakerDevices.get());
-//         updateDevices(ringtoneDevices, Twilio.Device.audio.ringtoneDevices.get());
-//     }
-// });
-
-
-
-
-//     // Update the available ringtone and speaker devices
-//     function updateDevices(selectEl, selectedDevices) {
-//         selectEl.innerHTML = '';
-//         Twilio.Device.audio.availableOutputDevices.forEach(function (device, id) {
-//             var isActive = (selectedDevices.size === 0 && id === 'default');
-//             selectedDevices.forEach(function (device) {
-//                 if (device.deviceId === id) { isActive = true; }
-//             });
-
-//             var option = document.createElement('option');
-//             option.label = device.label;
-//             option.setAttribute('data-id', id);
-//             if (isActive) {
-//                 option.setAttribute('selected', 'selected');
-//             }
-//             selectEl.appendChild(option);
-//         });
-//     }
-
-//     // Activity log
-//     function log(message) {
-//         var logDiv = document.getElementById('log');
-//         logDiv.innerHTML += '<p>&gt;&nbsp;' + message + '</p>';
-//         logDiv.scrollTop = logDiv.scrollHeight;
-//     }
-
-//     // Set the client name in the UI
-//     function setClientNameUI(clientName) {
-//         var div = document.getElementById('client-name');
-//         div.innerHTML = 'Your client name: <strong>' + clientName + '</strong>';
-//     }
+    // Set the client name in the UI
+    function setClientNameUI(clientName) {
+        var div = document.getElementById('client-name');
+        div.innerHTML = 'Your client name: <strong>' + clientName + '</strong>';
+    }
 </script>
 
 <style scoped>

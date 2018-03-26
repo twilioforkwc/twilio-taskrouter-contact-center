@@ -55,9 +55,19 @@
                         <template slot="title"><i class="el-icon-setting"></i>Agent</template>
                         <el-menu-item-group>
                             <template slot="title">エージェント</template>
-                            <router-link to="/operators/Mr.Rabbit/show">
-                                <el-menu-item index="3-1">Mr.Rabbit</el-menu-item>
-                            </router-link>
+                            <!-- <el-table :data="operators" style="width: 100%">
+                                <el-table-column>
+                                    <template slot-scope="scope">
+                                    </template>
+                                </el-table-column>
+                            </el-table> -->
+                            <ul>
+                                <li v-for="operator in operators">
+                                    <router-link v-bind:to="{ name : 'OperatorsShow', params : { sid: operator.sid }}">
+                                        <el-menu-item index="3-1" @click="reloadCurrentPage">{{ operator.friendlyName }}</el-menu-item>
+                                    </router-link>
+                                </li>
+                            </ul>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
@@ -71,8 +81,30 @@
 </template>
 
 <script>
+    import axios from 'axios';
+    import { Notification } from 'element-ui';
     export default {
-        name: 'App'
+        name: 'App',
+        // operators: [],
+        data() {
+            return {
+                operators: [],
+            }
+        },
+        mounted() {
+            this.getOperators();
+        },
+        methods: {
+            getOperators: function() {
+                axios.get("/api/twilio/workers")
+                    .then(response => {
+                        this.operators = response.data;
+                    });
+            },
+            reloadCurrentPage: function() {
+                location.reload();
+            },
+        }
     }
 </script>
 
