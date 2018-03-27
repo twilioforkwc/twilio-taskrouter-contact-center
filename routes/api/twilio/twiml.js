@@ -145,24 +145,18 @@ router.post('/voices/dial/:client', function (req, res, next) {
     console.log('###########');
     console.log(req.params.client);
     console.log('###########');
-    client.calls
-        .create({
-            url: NgrokDomain+'api/twilio/twiml/voices/conference',
-            to: 'client:'+req.params.client,
-            from: ConferenceNumber,
-        })
-        .then(
-            call => {
-                res.send(call);
-                fs.writeFile(file_path+'assignment'+'.'+extension, JSON.stringify({worker: null}), function (err) {
-                    if (err) {
-                        res.send({ status: "NG", message: err, result: null });
-                    } else {
-                        res.send(JSON.stringify(response));
-                    }
-                });
-            }
-        );
+    if(req.body.SequenceNumber < 2){
+        client.calls
+            .create({
+                url: NgrokDomain+'api/twilio/twiml/voices/conference',
+                to: 'client:'+req.params.client,
+                from: ConferenceNumber,
+            })
+            .then(
+                call => {
+                }
+            );
+    }
 });
 
 /**
