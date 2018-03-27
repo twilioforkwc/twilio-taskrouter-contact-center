@@ -1,172 +1,261 @@
 <template>
     <div style="width: calc(100% - 10px); padding: 10px;">
-        <h1>{{ title }}</h1>
+        <h1>{{ title_lang }}</h1>
         <div style="margin: 10px 0;">
-            
-            <el-table :data="ivr_settings" style="width: 100%">
-                <el-table-column label="登録日">
+            <el-table :data="languages" style="width: 100%">
+                <el-table-column label="言語名">
                     <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">{{ scope.row.dateCreated }}</span>
+                        <span>{{ scope.row.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="氏名">
+                <el-table-column label="識別子">
                     <template slot-scope="scope">
-                        <el-popover trigger="hover" placement="top">
-                            <p>Name: {{ scope.row.friendlyName }}</p>
-                            <p>Sid: {{ scope.row.sid }}</p>
-                            <div slot="reference" class="name-wrapper">
-                                <el-tag size="medium">{{ scope.row.friendlyName }}</el-tag>
-                            </div>
-                        </el-popover>
+                        <span>{{ scope.row.identifer }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="アクティビティ">
+                <el-table-column label="DTMF">
                     <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.activityName }}</span>
+                        <span>{{ scope.row.pin_code }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Lang属性">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.lang }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="読み上げ内容">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.text }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.$index)">Edit</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-
             <div style="width: 100%; padding: 10px; text-align: left;">
-                <el-button type="primary" @click="handleCreate()">オペーレーターを追加</el-button>
+                <el-button type="primary" size="small" @click="createDialog = true"><i class="el-icon-plus"></i></el-button>
             </div>
+
+            <el-dialog title="言語追加" :visible.sync="createDialog">
+                <el-form :model="form_create">
+                    <el-form-item label="言語名" :label-width="formLabelWidth">
+                        <el-input v-model="form_create.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="識別子" :label-width="formLabelWidth">
+                        <el-input v-model="form_create.identifer" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="DTMF" :label-width="formLabelWidth">
+                        <el-input v-model="form_create.pin_code" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Lang属性" :label-width="formLabelWidth">
+                        <el-input v-model="form_create.lang" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="読み上げ内容" :label-width="formLabelWidth">
+                        <el-input v-model="form_create.text" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="createDialog = false">Cancel</el-button>
+                    <el-button type="primary" @click="handleCreate()">Regist</el-button>
+                </span>
+            </el-dialog>
+
+            <el-dialog title="言語編集" :visible.sync="updateDialog">
+                <el-form :model="form_update">
+                    <el-form-item label="言語名" :label-width="formLabelWidth">
+                        <el-input v-model="form_update.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="識別子" :label-width="formLabelWidth">
+                        <el-input v-model="form_update.identifer" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="DTMF" :label-width="formLabelWidth">
+                        <el-input v-model="form_update.pin_code" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Lang属性" :label-width="formLabelWidth">
+                        <el-input v-model="form_update.lang" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="読み上げ内容" :label-width="formLabelWidth">
+                        <el-input v-model="form_update.text" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="updateDialog = false">Cancel</el-button>
+                    <el-button type="primary" @click="handleUpdate()">Update</el-button>
+                </span>
+            </el-dialog>
+
+        </div>
+        <h1>{{ title_skill }}</h1>
+        <div style="margin: 10px 0;">
+            <el-table :data="skills" style="width: 100%">
+                <el-table-column label="スキル名">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.name }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="識別子">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.identifer }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="handleSkillEdit(scope.$index)">Edit</el-button>
+                        <el-button size="mini" type="danger" @click="handleSkillDelete(scope.$index)">Delete</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div style="width: 100%; padding: 10px; text-align: left;">
+                <el-button type="primary" size="small" @click="createSkillDialog = true"><i class="el-icon-plus"></i></el-button>
+            </div>
+
+            <el-dialog title="スキル追加" :visible.sync="createSkillDialog">
+                <el-form :model="form_create">
+                    <el-form-item label="スキル名" :label-width="formLabelWidth">
+                        <el-input v-model="form_skill_create.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="識別子" :label-width="formLabelWidth">
+                        <el-input v-model="form_skill_create.identifer" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="createSkillDialog = false">Cancel</el-button>
+                    <el-button type="primary" @click="handleSkillCreate()">Regist</el-button>
+                </span>
+            </el-dialog>
+
+            <el-dialog title="スキル編集" :visible.sync="updateSkillDialog">
+                <el-form :model="form_update">
+                    <el-form-item label="スキル名" :label-width="formLabelWidth">
+                        <el-input v-model="form_skill_update.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="識別子" :label-width="formLabelWidth">
+                        <el-input v-model="form_skill_update.identifer" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="updateSkillDialog = false">Cancel</el-button>
+                    <el-button type="primary" @click="handleSkillUpdate()">Update</el-button>
+                </span>
+            </el-dialog>
 
         </div>
     </div>
 </template>
 
 <script>
-
     import axios from 'axios';
 
-    // var process = {env : {NODE_ENV: 'production'}}
-    // var fs = require('fs');
-
-    // var data = {
-    //     number: 1,
-    //     say: 'this is a number one.',
-    //     play: 'this is a number one.'
-    // };
-
-    // var fs = require('fs');
-    // const fs = require('fs-extra')
-    // var data = "write!!\n";
-    // try {
-    //     fs.writeFile('writetest.txt', data, function (err) {
-    //         console.log(err);
-    //     });   
-    // } catch (error) {
-    //     console.log(error);
-    // }
-
-    // var fs = require('fs');
-    // var data = "write!!\n";
-    // fs.writeFile('writetest.txt', data, function (err) {
-    //     console.log(err);
-    // });   
-
-    // // sqlite3を使う準備
-    // var sqlite3 = require("sqlite3").verbose();
-    // // :memory:を指定すると揮発性のDBができる。
-    // // DBファイルを指定する事で、永続化したDBを扱う事もができる。
-    // var db = new sqlite3.Database(":ttcc:");
-
-    // // serialize関数を使うと、
-    // // それぞれの行が実行されたら、次の行が実行される。
-    // // parallel関数を用いることで、平行実行もできる。
-    // db.serialize(function () {
-
-    //     // テーブルを作成する。
-    //     db.run("CREATE TABLE team (info TEXT");
-
-    //     // データを登録する。
-    //     var stmt = db.prepare("INSERT INTO team VALUES (?)");
-    //     for (var i = 0; i < 10; i++)
-    //         stmt.run("team " + i);
-    //     stmt.finalize();
-            
-    //     // データを更新する。
-    //     var stmt2 = db.prepare("UPDATE team SET info = ? WHERE info = ?");
-    //     for (var i = 0; i < 10; i+=3)
-    //         stmt2.run("team 10" + i, "team " + i);
-    //     stmt2.finalize();
-            
-    //     //参照する。
-    //     // 参照用関数は他にもあるが、今回は取得したものを1件ずつ扱うeach関数を利用する。
-    //     // 引数(row)のプロパティに、SELECT句で指定した要素があるので、
-    //     // たとえば「row.info」といったアクセスで値を取り出せる。
-    //     db.each("SELECT rowid AS id, info FROM team", function (err, row) {
-    //         console.log(row.id + " : " + row.info);
-    //     });
-    // });
-
-    // // DBを閉じる。
-    // db.close();
-
-    // var fs = require('fs')
-
-    // fs.writeFile('./myfile.txt', 'Content to write', { flag: 'w' }, function(err) {
-    //     if (err) 
-    //         return console.error(err); 
-    //     fs.readFile('./myfile.txt', 'utf-8', function (err, data) {
-    //         if (err)
-    //             return console.error(err);
-    //         console.log(data);
-    //     });
-    // })
-
-    // var jsonfile = require('jsonfile');
-    // var file = 'data.json';
-    // jsonfile.readFile(file, function(err, obj) {
-    //     console.dir(obj)
-    // });
-
-    // fs.writeFileSync('ivr_settings.json', data);
-
     export default {
-        name: 'Workers',
+        name: 'ivr_settings',
         data() {
             return {
                 count: 0,
                 value1: 50,
-                title: 'オペーレーター管理画面',
-                ivr_settings: []
+                title_lang: '設定言語一覧',
+                title_skill: '設定スキル一覧',
+                languages: [],
+                skills: [],
+                createDialog: false,
+                updateDialog: false,
+                createSkillDialog: false,
+                updateSkillDialog: false,
+                form_create: {
+                    name: '',
+                    identifer: '',
+                    pin_code: '',
+                    lang: '',
+                    text: '',
+                },
+                form_update: {
+                    name: '',
+                    identifer: '',
+                    pin_code: '',
+                    lang: '',
+                    text: '',
+                },
+                form_skill_create: {
+                    name: '',
+                    identifer: '',
+                },
+                form_skill_update: {
+                    name: '',
+                    identifer: '',
+                },
+                tmp_index: null,
+                formLabelWidth: '120px',
             }
         },
         mounted() {
-            axios.get("/api/twilio/workers")
-                .then(response => {
-                    console.log(response.data[0]);
-                    this.ivr_settings = response.data;
-                });
+            this.getLanguages();
+            this.getSkills();
         },
         methods: {
-            handleCreate: function () {
-                location.href = '/#/workers/create';
-            },
-            handleShow: function (index, row_data) {
-                location.href = '/#/workers/'+row_data.sid+'/show';
-            },
-            handleEdit: function (index, row_data) {
-                location.href = '/#/workers/'+row_data.sid+'/edit';
-            },
-            handleDelete: function (index, row_data) {
-                // location.href = '/#/workers/show';
-                axios.delete("/api/twilio/workers/"+row_data.sid)
+            getLanguages: function () {
+                axios.get("/api/db/files/languages")
                     .then(response => {
-                        console.log(response.data.status);
-                        if (response.data.status === 'OK') {
-                            location.href = '/#/workers';
-                        } else {
-                            console.log('NGNGNGNGNGGN');
-                        }
+                        this.languages = response.data.result;
+                    });
+            },
+            getSkills: function () {
+                axios.get("/api/db/files/skills")
+                    .then(response => {
+                        this.skills = response.data.result;
+                    });
+            },
+            handleCreate: function () {
+                this.createDialog = false;
+                this.languages.push(this.form_create);
+                this.saveLanguages();
+            },
+            handleSkillCreate: function () {
+                this.createSkillDialog = false;
+                this.skills.push(this.form_skill_create);
+                this.saveSkills();
+            },
+            handleEdit: function (index) {
+                this.updateDialog = true;
+                this.form_update = this.languages[index];
+                this.tmp_index = index;
+            },
+            handleSkillEdit: function (index) {
+                this.updateSkillDialog = true;
+                this.form_skill_update = this.skills[index];
+                this.tmp_index = index;
+            },
+            handleUpdate: function () {
+                this.updateDialog = false;
+                this.languages[this.tmp_indx] = this.form_update;
+                this.saveLanguages();
+            },
+            handleSkillUpdate: function () {
+                this.updateSkillDialog = false;
+                this.skills[this.tmp_indx] = this.form_skill_update;
+                this.saveSkills();
+            },
+            handleDelete: function (index) {
+                this.languages.splice(index,1);
+                this.saveLanguages();
+            },
+            handleSkillDelete: function (index) {
+                this.skills.splice(index,1);
+                this.saveSkills();
+            },
+            saveLanguages: function() {
+                axios.post("/api/db/files/languages", this.languages)
+                    .then(response => {
+                        console.log(response.data.message);
+                        this.getLanguages();
+                    });
+            },
+            saveSkills: function() {
+                axios.post("/api/db/files/skills", this.skills)
+                    .then(response => {
+                        console.log(response.data.message);
+                        this.getSkills();
                     });
             }
         }

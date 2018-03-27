@@ -10,7 +10,7 @@ router.get('/:file_name', function (req, res, next) {
         if (err) {
             res.send({ status: "NG", message: err, result: null });
         } else {
-            res.send({ status: "OK", message: 'Get request was executed successfully!!', result: JSON.stringify(JSON.parse(data)) });
+            res.send({ status: "OK", message: 'Get request was executed successfully!!', result: JSON.parse(data) });
         }
     });
 });
