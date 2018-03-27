@@ -123,8 +123,11 @@ router.post('/voices/conference', function (req, res, next) {
         } else {
             var response = new VoiceResponse();
             var dial = response.dial();
+            console.log('#####WORKER######');
+            console.log(data);
+            console.log('###########');
             dial.conference({
-                statusCallback: '/api/twilio/twiml/voices/dial/'+data[0].worker,
+                statusCallback: '/api/twilio/twiml/voices/dial/'+JSON.parse(data).worker,
                 statusCallbackEvent: 'join'
             }, 'TwilioTaskRouterContactConference');
             
@@ -140,19 +143,26 @@ router.post('/voices/dial/:client', function (req, res, next) {
     console.log('#####DIAL CLIENT######');
     console.log(req.body);
     console.log('###########');
-    // if(req.body.SequenceNumber == 1){
-    //     client.calls
-    //         .create({
-    //             url: NgrokDomain+'api/twilio/twiml/voices/conference',
-    //             to: 'client:'+req.params.client,
-    //             from: ConferenceNumber,
-    //         })
-    //         .then(
-    //             call => {
-    //                 res.send(call);
-    //             }
-    //         );
-    // }
+    console.log(req.params.client);
+    console.log('###########');
+    // client.calls
+    //     .create({
+    //         url: NgrokDomain+'api/twilio/twiml/voices/conference',
+    //         to: 'client:'+req.params.client,
+    //         from: ConferenceNumber,
+    //     })
+    //     .then(
+    //         call => {
+    //             res.send(call);
+    //             fs.writeFile(file_path+'assignment'+'.'+extension, JSON.stringify({worker: null}), function (err) {
+    //                 if (err) {
+    //                     res.send({ status: "NG", message: err, result: null });
+    //                 } else {
+    //                     res.send(JSON.stringify(response));
+    //                 }
+    //             });
+    //         }
+    //     );
 });
 
 /**
