@@ -92,7 +92,7 @@ Open the page for super visor on another window.
 
 http://localhost:1080/#/sv/monitor
 
-Finally, call your Twilio number!!  
+Finally, call to your Twilio number!!  
 
 ## Contribution
 Contributions are welcome and generally accepted.
