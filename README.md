@@ -76,7 +76,7 @@ Restart your server.
 
 `docker-compose up`
 
-Set your ivr settings.
+Regist your ivr settings.
 
 http://localhost:1080/#/ivrs
 
