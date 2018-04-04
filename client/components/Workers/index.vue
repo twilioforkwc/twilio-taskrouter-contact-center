@@ -61,7 +61,6 @@
         mounted() {
             axios.get("/api/twilio/workers")
                 .then(response => {
-                    console.log(response.data[0]);
                     this.msg = response.data[0].friendlyName
                     this.operators = response.data;
                 });
@@ -80,7 +79,6 @@
                 // location.href = '/#/workers/show';
                 axios.delete("/api/twilio/workers/"+row_data.sid)
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             location.href = '/#/workers';
                             Notification.success(

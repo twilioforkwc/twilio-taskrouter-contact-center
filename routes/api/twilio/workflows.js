@@ -227,20 +227,20 @@ router.put('/update', function (req, res, next) {
             console.log(paramsJson.selectedLanguage.length);
             console.log(i);
             if ((i+1)< paramsJson.selectedLanguage.length) {
-                expression = expression + " AND\n ";
+                expression = expression + " OR\n ";
             }
         });
-        expression = expression + ") OR\n ";
+        expression = expression + ") AND\n ";
     }
     if (paramsJson.selectedLanguage.length > 0) {
         expression = expression + "(";
         paramsJson.selectedSkill.forEach(function(skill, i){
             expression = expression + generateExpression("technical_skill", "==", skill);
             if ((i+1)< paramsJson.selectedSkill.length) {
-                expression = expression + " AND\n ";
+                expression = expression + " OR\n ";
             }
         });
-        expression = expression + ") OR\n ";
+        expression = expression + ") AND\n ";
     }
     if (paramsJson.startTime && paramsJson.endTime) {
         expression = expression + "(taskrouter.currentTime > "+paramsJson.startTime.replace(/:/g,"")+" AND taskrouter.currentTime < "+paramsJson.endTime.replace(/:/g,"")+")";

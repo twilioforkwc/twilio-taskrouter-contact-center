@@ -9,10 +9,7 @@
                 </el-form-item>
                 <el-form-item label="ACTIVITY">
                     <el-select v-model="form.activity">
-                        <el-option label="OFFLINE" value="WAf25a704e4a1544098b4f762a60b24649"></el-option>
-                        <el-option label="IDLE" value="WAeb5551de3ed19afee38139300455216f"></el-option>
-                        <el-option label="BUSY" value="WAce43c63a199bc34703461baaf9aa13e8"></el-option>
-                        <el-option label="RESERVED" value="WAfe88f1e0b1bc35f30682bc296067bf00"></el-option>
+                        <el-option v-for="activity in activities" :label="activity.freindlyName" :value="activity.sid"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="LANGUAGES">
@@ -60,7 +57,8 @@
     export default {
         data() {
             return {
-                title: 'オペーレーター追加画面',
+                title: 'オペーレーター編集画面',
+                activities: [],
                 form: {
                     name: '',
                     activity: '',
@@ -71,32 +69,36 @@
             }
         },
         mounted() {
-            console.log(this.$route.params.sid);
-            axios.get("/api/twilio/workers/show/" + this.$route.params.sid)
-                .then(response => {
-                    console.log(response.data.status);
-                    if (response.data.status === 'OK') {
-                        // location.href = '/#/workers';
-                        console.log(response.data.attributes);
-                        console.log(JSON.parse(response.data.attributes).technical_skill);
-                        console.log(response.data.attributes["technical_skill"]);
-                        this.form.name = response.data.friendlyName;
-                        this.form.activity = response.data.activityName;
-                        this.form.skills = JSON.parse(response.data.attributes).technical_skill;
-                        this.form.languages = JSON.parse(response.data.attributes).languages;
-                        this.form.attributes = response.data.attributes;
-                    } else {
-                        console.log('ワーカー情報の取得に失敗しました');
-                        Notification.error(
-                            {
-                                title: "Error",
-                                message: "ワーカー情報の取得に失敗しました"
-                            }
-                        );
-                    }
-                });
+            this.getActivities();
+            this.getWorkerInfo();
         },
         methods: {
+            getWorkerInfo() {
+                axios.get("/api/twilio/workers/show/" + this.$route.params.sid)
+                    .then(response => {
+                        if (response.data.status === 'OK') {
+                            this.form.name = response.data.friendlyName;
+                            this.form.activity = response.data.activityName;
+                            this.form.skills = JSON.parse(response.data.attributes).technical_skill;
+                            this.form.languages = JSON.parse(response.data.attributes).languages;
+                            this.form.attributes = response.data.attributes;
+                        } else {
+                            console.log('ワーカー情報の取得に失敗しました');
+                            Notification.error(
+                                {
+                                    title: "Error",
+                                    message: "ワーカー情報の取得に失敗しました"
+                                }
+                            );
+                        }
+                    });
+            },
+            getActivities() {
+                axios.get("/api/twilio/activities")
+                    .then(response => {
+                        this.activities = response.data;
+                    });
+            },
             onSubmit() {
                 axios.put("/api/twilio/workers/update", JSON.stringify({
                         sid: this.$route.params.sid,
@@ -104,7 +106,6 @@
                         activity: this.form.activity,
                         skills: this.form.skills,
                         languages: this.form.languages,
-                        // attributes: this.form.attributes
                     }))
                     .then(response => {
                         console.log(response.data.status);

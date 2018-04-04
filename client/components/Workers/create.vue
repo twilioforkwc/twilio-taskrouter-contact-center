@@ -78,10 +78,8 @@
                         activity: this.form.activity,
                         skills: this.form.skills,
                         languages: this.form.languages,
-                        // attributes: this.form.attributes
                     }))
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             console.log('ワーカーの登録に成功しました');
                             location.href = '/#/workers';

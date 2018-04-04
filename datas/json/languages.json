@@ -1,1 +1,1 @@
-[{"name":"日本語","identifer":"japanese","lang":"ja-JP","text":"日本語なら1を押してください。","pin_code":"1"},{"name":"英語","identifer":"english","lang":"ja-JP","text":"英語なら2を押してください。","pin_code":"2"}]
+[{"name":"日本語","identifer":"jp","lang":"ja-JP","text":"日本語なら1を押してください。","pin_code":"1"},{"name":"英語","identifer":"en","lang":"ja-JP","text":"英語なら2を押してください。","pin_code":"2"},{"name":"中国語","identifer":"ch","pin_code":"3","lang":"ja-JP","text":"中国語は3を押してください"}]

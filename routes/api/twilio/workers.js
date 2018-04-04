@@ -98,6 +98,7 @@ router.put('/update', function (req, res, next) {
         technical_skill: paramsJson.skills,
         languages: paramsJson.languages,
     };
+    console.log(paramsJson);
     // Request Twioio API.
     try {
         client.taskrouter.v1

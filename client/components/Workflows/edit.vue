@@ -185,7 +185,7 @@
                             this.form.assignmentCallbackUrl = response.data.assignmentCallbackUrl;
                             this.form.fallbackAssignmentCallbackUrl = response.data.fallbackAssignmentCallbackUrl;
                             this.form.taskReservationTimeout = response.data.taskReservationTimeout;
-                            this.form.configuration = JSON.stringify(JSON.parse(response.data.configuration), null, "    ");
+                            this.form.configuration = JSON.stringify(JSON.parse(response.data.configuration), null, "    ").replace(/'\n'/g, '');
                             this.form.dateCreated = response.data.dateCreated;
                             this.form.dateUpdated = response.data.dateUpdated;
                             this.form.filter_friendly_name = filter.filter_friendly_name;
@@ -250,5 +250,8 @@
     }
     .el-select {
         width: 100%;
+    }
+    pre {
+        white-space: pre-wrap ;
     }
 </style>

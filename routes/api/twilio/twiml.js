@@ -87,11 +87,13 @@ router.post('/voices/assignment', function (req, res, next) {
     console.log(req.body);
     console.log('###########');
     var response = {
-        'instruction': 'dequeue',
-        'to': ConferenceNumber,
+        'instruction': 'Conference',
+        'to': "client:"+req.body.WorkerSid,
         'from': ConferenceNumber,
-        'status_callback_url': NgrokDomain+'api/twilio/twiml/voices/assignment/callback',
-        'status_callback_events': 'initiated'
+        'status_callback': NgrokDomain+'api/twilio/twiml/voices/assignment/callback',
+        'timeout': 15,
+        'status_callback_events': 'initiated',
+        'end_conference_on_exit': true
     };
     fs.writeFile(file_path+'assignment'+'.'+extension, JSON.stringify({worker: req.body.WorkerSid}), function (err) {
         if (err) {
@@ -128,7 +130,8 @@ router.post('/voices/conference', function (req, res, next) {
             console.log('###########');
             dial.conference({
                 statusCallback: '/api/twilio/twiml/voices/dial/'+JSON.parse(data).worker,
-                statusCallbackEvent: 'join'
+                statusCallbackEvent: 'join',
+                endConferenceOnExit: true
             }, 'TwilioTaskRouterContactConference');
             
             res.send(response.toString());

@@ -10,12 +10,9 @@
                             <router-link to="/workers">
                                 <el-menu-item index="1-1">一覧</el-menu-item>
                             </router-link>
-                            <router-link to="/workers/create">
+                            <!-- <router-link to="/workers/create">
                                 <el-menu-item index="1-2">新規登録</el-menu-item>
-                            </router-link>
-                            <router-link to="/test2">
-                                <el-menu-item index="1-3">テスト</el-menu-item>
-                            </router-link>
+                            </router-link> -->
                         </el-menu-item-group>
                         <el-menu-item-group>
                             <template slot="title">IVR設定</template>
