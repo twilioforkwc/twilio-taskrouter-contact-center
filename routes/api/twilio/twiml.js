@@ -86,12 +86,21 @@ router.post('/voices/assignment', function (req, res, next) {
     console.log('#####ASSIGNMENT######');
     console.log(req.body);
     console.log('###########');
+    var to;
+    var name = JSON.parse(req.body.WorkerAttributes).name;
+    if(name.match(/#/)){
+        to = 'sip:' + name.split('#')[1];
+    } else {
+        to = "client:"+req.body.WorkerSid;
+    };
+    console.log(to);
     var response = {
         'instruction': 'Conference',
-        'to': "client:"+req.body.WorkerSid,
+        // 'to': "client:"+req.body.WorkerSid,
+        'to': to,
         'from': ConferenceNumber,
         'status_callback': NgrokDomain+'api/twilio/twiml/voices/assignment/callback',
-        'timeout': 15,
+        'timeout': 1,
         'status_callback_events': 'initiated',
         'end_conference_on_exit': true
     };

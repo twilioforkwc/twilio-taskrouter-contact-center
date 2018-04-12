@@ -9,7 +9,7 @@
                 </el-form-item>
                 <el-form-item label="ACTIVITY">
                     <el-select v-model="form.activity">
-                        <el-option v-for="activity in activities" :label="activity.freindlyName" :value="activity.sid"></el-option>
+                        <el-option v-for="activity in activities" :label="activity.friendlyName" :value="activity.sid"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="LANGUAGES">
@@ -54,6 +54,9 @@
 <script>
     import axios from 'axios';
     import { Notification } from 'element-ui';
+
+    var vueObj;
+
     export default {
         data() {
             return {
@@ -64,11 +67,12 @@
                     activity: '',
                     skills: [],
                     languages: [],
-                    attributes: ''
+                    attributes: []
                 }
             }
         },
         mounted() {
+            vueObj = this;
             this.getActivities();
             this.getWorkerInfo();
         },
@@ -96,7 +100,16 @@
             getActivities() {
                 axios.get("/api/twilio/activities")
                     .then(response => {
+                        console.log(response.data);
                         this.activities = response.data;
+                        this.activities.forEach(element => {
+                            // console.log(element.friendlyName);
+                            // console.log(element.sid);
+                            // console.log(vueObj.form.activity);
+                            if(element.friendlyName == vueObj.form.activity){
+                                vueObj.form.activity = element.sid;
+                            }
+                        });
                     });
             },
             onSubmit() {
