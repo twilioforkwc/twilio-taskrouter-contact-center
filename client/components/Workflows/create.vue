@@ -42,6 +42,16 @@
                                         </el-col>
                                     </el-row>
                                     <el-row :gutter="20" type="flex" class="row-bg" justify="space-between">
+                                        <el-col :span="24">
+                                            <div class="grid-content">
+                                                <el-form-item label="Configuration">
+                                                    <el-input v-model="form.expression" type="textarea" :rows="6">
+                                                    </el-input>
+                                                </el-form-item>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                    <!-- <el-row :gutter="20" type="flex" class="row-bg" justify="space-between">
                                         <el-col :span="6">
                                             <div class="grid-content">
                                                 <el-form-item label="始業時間">
@@ -88,7 +98,7 @@
                                                 </el-form-item>
                                             </div>
                                         </el-col>
-                                    </el-row>
+                                    </el-row> -->
                                 </template>
                             </el-tab-pane>
                             <el-tab-pane label="View as JSON" name="second">
@@ -122,6 +132,7 @@
                         fallbackAssignmentCallbackUrl: '',
                         taskReservationTimeout: '',
                         configuration: '',
+                        expression: '',
                         dateCreated: '',
                         dateUpdated: '',
                     },
@@ -190,10 +201,11 @@
                                 this.form.dateUpdated = response.data.dateUpdated;
                                 this.form.filter_friendly_name = filter.filter_friendly_name;
                                 this.form.task_queue_sid = filter.queue;
-                                this.form.start_time = filter.start_time;
-                                this.form.end_time = filter.end_time;
-                                this.form.selected_language = filter.selected_languages;
-                                this.form.selected_skill = filter.selected_skills;
+                                this.form.expression = filter.targets[0].queue;
+                                // this.form.start_time = filter.start_time;
+                                // this.form.end_time = filter.end_time;
+                                // this.form.selected_language = filter.selected_languages;
+                                // this.form.selected_skill = filter.selected_skills;
                                 console.log(response.data.filters);
                             } else {
                                 // console.log('ワークフロー情報の取得に失敗しました');

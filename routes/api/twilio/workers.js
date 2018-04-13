@@ -77,7 +77,7 @@ router.post('/create', function (req, res, next) {
     try {
         client.taskrouter.v1.workspaces(workspaceSid).workers.create({
             friendlyName: paramsJson.name,
-            activityName: paramsJson.activity,
+            activitySid: paramsJson.activity,
             attributes: JSON.stringify(mAttributes),
         }).then(reseult => {
             res.send({ status: "OK" });

@@ -9,37 +9,17 @@
                 </el-form-item>
                 <el-form-item label="ACTIVITY">
                     <el-select v-model="form.activity">
-                        <el-option label="OFFLINE" value="offline"></el-option>
-                        <el-option label="IDLE" value="idle"></el-option>
-                        <el-option label="BUSY" value="busy"></el-option>
-                        <el-option label="RESERVED" value="reserved"></el-option>
+                        <el-option v-for="activity in activities" :label="activity.friendlyName" :value="activity.sid"></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- <el-form-item label="属性">
-                    <el-popover trigger="hover" placement="top">
-                        <p>Attributes model each Worker's unique properties as a JSON document. TaskQueues route Tasks to Workers based on these attributes. Example: {"name": "Alice", "technical_skill": 5, "languages": ["ru", "en"]}</p>
-                        <div slot="reference" class="name-wrapper">
-                            <el-input type="textarea" v-model="form.attributes"></el-input>
-                        </div>
-                    </el-popover>
-                </el-form-item> -->
                 <el-form-item label="LANGUAGES">
                     <el-select v-model="form.languages" multiple>
-                        <el-option label="JAPANESE" value="jp"></el-option>
-                        <el-option label="ENGLISH" value="en"></el-option>
-                        <el-option label="SPANISH" value="es"></el-option>
-                        <el-option label="CHINESE" value="ch"></el-option>
+                        <el-option v-for="language in languages" :label="language.name" :value="language.identifer"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="SKILLS">
                     <el-select v-model="form.skills" multiple>
-                        <el-option label="C#" value="csharp"></el-option>
-                        <el-option label="CURL" value="curl"></el-option>
-                        <el-option label="JAVA" value="java"></el-option>
-                        <el-option label="NODE.JS" value="nodejs"></el-option>
-                        <el-option label="PHP" value="php"></el-option>
-                        <el-option label="PYTHON" value="python"></el-option>
-                        <el-option label="RUBY" value="ruby"></el-option>
+                        <el-option v-for="skill in skills" :label="skill.name" :value="skill.identifer"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -58,10 +38,16 @@
 
     import axios from 'axios';
     import { Notification } from 'element-ui';
+
+    var vueObj;
+
     export default {
         data() {
             return {
                 title: 'オペーレーター追加画面',
+                activities: [],
+                languages: [],
+                skills: [],
                 form: {
                     name: '',
                     activity: '',
@@ -71,7 +57,37 @@
                 }
             }
         },
+        mounted() {
+            vueObj = this;
+            this.getLanguages();
+            this.getSkills();
+            this.getActivities();
+        },
         methods: {
+            getLanguages: function () {
+                axios.get("/api/db/files/languages")
+                    .then(response => {
+                        this.languages = response.data.result;
+                    });
+            },
+            getSkills: function () {
+                axios.get("/api/db/files/skills")
+                    .then(response => {
+                        this.skills = response.data.result;
+                    });
+            },
+            getActivities() {
+                axios.get("/api/twilio/activities")
+                    .then(response => {
+                        console.log(response.data);
+                        this.activities = response.data;
+                        this.activities.forEach(element => {
+                            if(element.friendlyName == vueObj.form.activity){
+                                vueObj.form.activity = element.sid;
+                            }
+                        });
+                    });
+            },
             onSubmit() {
                 axios.post("/api/twilio/workers/create", JSON.stringify({
                         name: this.form.name,

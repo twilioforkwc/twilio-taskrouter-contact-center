@@ -48,10 +48,11 @@ router.get('/show/:sid', function (req, res, next) {
             .workflows(req.params.sid)
             .fetch()
             .then((workflow) => {
-                console.log('console ready.');
-                console.log(workflow.configuration);
+                console.log('coonsle ready.');
+                console.log(JSON.parse(workflow.configuration).task_routing.filters[0].expression);
                 console.log('console end.');
-                var filters = parseFiltersToArrayFromJson(workflow.configuration);
+                // var filters = parseFiltersToArrayFromJson(workflow.configuration);
+                var filters = JSON.parse(workflow.configuration).task_routing.filters;
                 // exit;
                 res.send({
                     status: "OK",
@@ -131,32 +132,32 @@ router.post('/create', function (req, res, next) {
     // };
     // Request Twilio API.
     console.log(paramsJson.selectedLanguage);
-    var expression = "";
-    if (paramsJson.selectedLanguage.length > 0) {
-        expression = expression + "(";
-        paramsJson.selectedLanguage.forEach(function(lang, i){
-            expression = expression + generateExpression("selected_language", "==", lang);
-            console.log(paramsJson.selectedLanguage.length);
-            console.log(i);
-            if ((i+1)< paramsJson.selectedLanguage.length) {
-                expression = expression + " AND\n ";
-            }
-        });
-        expression = expression + ") OR\n ";
-    }
-    if (paramsJson.selectedLanguage.length > 0) {
-        expression = expression + "(";
-        paramsJson.selectedSkill.forEach(function(skill, i){
-            expression = expression + generateExpression("technical_skill", "==", skill);
-            if ((i+1)< paramsJson.selectedSkill.length) {
-                expression = expression + " AND\n ";
-            }
-        });
-        expression = expression + ") OR\n ";
-    }
-    if (paramsJson.startTime && paramsJson.endTime) {
-        expression = expression + "(taskrouter.currentTime > "+paramsJson.startTime.replace(/:/g,"")+" AND taskrouter.currentTime < "+paramsJson.endTime.replace(/:/g,"")+")";
-    }
+    var expression = paramsJson.expression;
+    // if (paramsJson.selectedLanguage.length > 0) {
+    //     expression = expression + "(";
+    //     paramsJson.selectedLanguage.forEach(function(lang, i){
+    //         expression = expression + generateExpression("selected_language", "==", lang);
+    //         console.log(paramsJson.selectedLanguage.length);
+    //         console.log(i);
+    //         if ((i+1)< paramsJson.selectedLanguage.length) {
+    //             expression = expression + " AND\n ";
+    //         }
+    //     });
+    //     expression = expression + ") OR\n ";
+    // }
+    // if (paramsJson.selectedLanguage.length > 0) {
+    //     expression = expression + "(";
+    //     paramsJson.selectedSkill.forEach(function(skill, i){
+    //         expression = expression + generateExpression("technical_skill", "==", skill);
+    //         if ((i+1)< paramsJson.selectedSkill.length) {
+    //             expression = expression + " AND\n ";
+    //         }
+    //     });
+    //     expression = expression + ") OR\n ";
+    // }
+    // if (paramsJson.startTime && paramsJson.endTime) {
+    //     expression = expression + "(taskrouter.currentTime > "+paramsJson.startTime.replace(/:/g,"")+" AND taskrouter.currentTime < "+paramsJson.endTime.replace(/:/g,"")+")";
+    // }
     // expression = expression + "\"";
     console.log(expression);
     // expression = expression + "(";
@@ -219,32 +220,32 @@ router.put('/update', function (req, res, next) {
     // };
     // Request Twilio API.
     console.log(paramsJson.selectedLanguage);
-    var expression = "";
-    if (paramsJson.selectedLanguage.length > 0) {
-        expression = expression + "(";
-        paramsJson.selectedLanguage.forEach(function(lang, i){
-            expression = expression + generateExpression("selected_language", "==", lang);
-            console.log(paramsJson.selectedLanguage.length);
-            console.log(i);
-            if ((i+1)< paramsJson.selectedLanguage.length) {
-                expression = expression + " OR\n ";
-            }
-        });
-        expression = expression + ") AND\n ";
-    }
-    if (paramsJson.selectedLanguage.length > 0) {
-        expression = expression + "(";
-        paramsJson.selectedSkill.forEach(function(skill, i){
-            expression = expression + generateExpression("technical_skill", "==", skill);
-            if ((i+1)< paramsJson.selectedSkill.length) {
-                expression = expression + " OR\n ";
-            }
-        });
-        expression = expression + ") AND\n ";
-    }
-    if (paramsJson.startTime && paramsJson.endTime) {
-        expression = expression + "(taskrouter.currentTime > "+paramsJson.startTime.replace(/:/g,"")+" AND taskrouter.currentTime < "+paramsJson.endTime.replace(/:/g,"")+")";
-    }
+    var expression = paramsJson.expression;
+    // if (paramsJson.selectedLanguage.length > 0) {
+    //     expression = expression + "(";
+    //     paramsJson.selectedLanguage.forEach(function(lang, i){
+    //         expression = expression + generateExpression("selected_language", "==", lang);
+    //         console.log(paramsJson.selectedLanguage.length);
+    //         console.log(i);
+    //         if ((i+1)< paramsJson.selectedLanguage.length) {
+    //             expression = expression + " OR\n ";
+    //         }
+    //     });
+    //     expression = expression + ") AND\n ";
+    // }
+    // if (paramsJson.selectedLanguage.length > 0) {
+    //     expression = expression + "(";
+    //     paramsJson.selectedSkill.forEach(function(skill, i){
+    //         expression = expression + generateExpression("technical_skill", "==", skill);
+    //         if ((i+1)< paramsJson.selectedSkill.length) {
+    //             expression = expression + " OR\n ";
+    //         }
+    //     });
+    //     expression = expression + ") AND\n ";
+    // }
+    // if (paramsJson.startTime && paramsJson.endTime) {
+    //     expression = expression + "(taskrouter.currentTime > "+paramsJson.startTime.replace(/:/g,"")+" AND taskrouter.currentTime < "+paramsJson.endTime.replace(/:/g,"")+")";
+    // }
     // expression = expression + "\"";
     console.log(expression);
     // expression = expression + "(";

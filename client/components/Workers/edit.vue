@@ -15,33 +15,15 @@
                 <el-form-item label="LANGUAGES">
                     <el-select v-model="form.languages" multiple>
                         <el-option v-for="language in languages" :label="language.name" :value="language.identifer"></el-option>
-                        <!-- <el-option label="JAPANESE" value="jp"></el-option>
-                        <el-option label="ENGLISH" value="en"></el-option>
-                        <el-option label="SPANISH" value="es"></el-option>
-                        <el-option label="CHINESE" value="ch"></el-option> -->
                     </el-select>
                 </el-form-item>
                 <el-form-item label="SKILLS">
                     <el-select v-model="form.skills" multiple>
                         <el-option v-for="skill in skills" :label="skill.name" :value="skill.identifer"></el-option>
-                        <!-- <el-option label="C#" value="csharp"></el-option>
-                        <el-option label="CURL" value="curl"></el-option>
-                        <el-option label="JAVA" value="java"></el-option>
-                        <el-option label="NODE.JS" value="nodejs"></el-option>
-                        <el-option label="PHP" value="php"></el-option>
-                        <el-option label="PYTHON" value="python"></el-option>
-                        <el-option label="RUBY" value="ruby"></el-option> -->
                     </el-select>
                 </el-form-item>
                 <el-form-item label="属性">
-                    <!-- <el-popover trigger="hover" placement="top">
-                        <p>Attributes model each Worker's unique properties as a JSON document. TaskQueues route Tasks to Workers
-                            based on these attributes. Example: {"name": "Alice", "technical_skill": 5, "languages": ["ru",
-                            "en"]}</p>
-                    </el-popover> -->
                     <el-input type="textarea" v-model="form.attributes" disabled></el-input>
-                    <!-- <div slot="reference" class="name-wrapper">
-                    </div> -->
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">Update</el-button>
@@ -121,9 +103,6 @@
                         console.log(response.data);
                         this.activities = response.data;
                         this.activities.forEach(element => {
-                            // console.log(element.friendlyName);
-                            // console.log(element.sid);
-                            // console.log(vueObj.form.activity);
                             if(element.friendlyName == vueObj.form.activity){
                                 vueObj.form.activity = element.sid;
                             }
