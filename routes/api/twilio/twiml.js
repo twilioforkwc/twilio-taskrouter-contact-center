@@ -8,7 +8,6 @@ const config = require('./config');
 
 const accountSid = config.TWILIO_ACCOUNT_SID;
 const authToken = config.TWILIO_AUTH_TOKEN;
-const workspaceSid = config.TWILIO_TASKROUTER_WORKSPACE_SID;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const NgrokDomain = config.NGROK_GLOBAL_DOMAIN;
 const ConferenceNumber = config.TWILIO_CONFERENCE_NUMBER;
@@ -19,7 +18,7 @@ const client = require('twilio')(accountSid, authToken);
  * IVR voice response url.
  * Respond twiml gather verb for selecting language.
  */
-router.post('/voices/ivr', function (req, res, next) {
+router.post('/voices/ivr', function (req, res) {
     res.header('Content-Type', 'application/xml; charset=utf-8')
     const response = new VoiceResponse();
     const gather = response.gather({
@@ -36,18 +35,17 @@ router.post('/voices/ivr', function (req, res, next) {
             var say_list = null;
             say_list = JSON.parse(data);
             say_list.forEach(element => {
-                console.log(element);
                 gather.say({language: element.lang}, element.text);
             });
             res.send(response.toString());
-        };
+        }
     });
 });
 
 /**
  * IVR voice response url.
  */
-router.post('/voices/enqueue', function (req, res, next) {
+router.post('/voices/enqueue', function (req, res) {
     res.header('Content-Type', 'application/xml; charset=utf-8')
 
     var digit_pressed = req.body.Digits;
@@ -74,14 +72,14 @@ router.post('/voices/enqueue', function (req, res, next) {
             .task({}, JSON.stringify(json));
 
             res.send(response.toString());
-        };
+        }
     });
 });
 
 /**
  * IVR voice response url.
  */
-router.post('/voices/assignment', function (req, res, next) {
+router.post('/voices/assignment', function (req, res) {
     res.header('Content-Type', 'application/json; charset=utf-8')
     console.log('#####ASSIGNMENT######');
     console.log(req.body);
@@ -92,7 +90,7 @@ router.post('/voices/assignment', function (req, res, next) {
         to = 'sip:' + name.split('#')[1];
     } else {
         to = "client:"+req.body.WorkerSid;
-    };
+    }
     console.log(to);
     var response = {
         'instruction': 'Conference',
@@ -116,7 +114,7 @@ router.post('/voices/assignment', function (req, res, next) {
 /**
  * IVR voice response url.
  */
-router.post('/voices/assignment/callback', function (req, res, next) {
+router.post('/voices/assignment/callback', function (req) {
     console.log('#####ASSIGNMENT CALLBACK######');
     console.log(req.body);
     console.log('###########');
@@ -125,7 +123,7 @@ router.post('/voices/assignment/callback', function (req, res, next) {
 /**
  * IVR voice response url.
  */
-router.post('/voices/conference', function (req, res, next) {
+router.post('/voices/conference', function (req, res) {
     res.header('Content-Type', 'application/xml; charset=utf-8')
 
     fs.readFile(file_path+'assignment'+'.'+extension, 'utf-8', (err, data) => {
@@ -144,14 +142,14 @@ router.post('/voices/conference', function (req, res, next) {
             }, 'TwilioTaskRouterContactConference');
             
             res.send(response.toString());
-        };
+        }
     });
 });
 
 /**
  * IVR voice response url.
  */
-router.post('/voices/dial/:client', function (req, res, next) {
+router.post('/voices/dial/:client', function (req) {
     console.log('#####DIAL CLIENT######');
     console.log(req.body);
     console.log('###########');
@@ -164,54 +162,8 @@ router.post('/voices/dial/:client', function (req, res, next) {
                 to: 'client:'+req.params.client,
                 from: ConferenceNumber,
             })
-            .then(
-                call => {
-                }
-            );
+            .then( function() { });
     }
 });
-
-/**
- * Return workers list.
- */
-function _getWorkerList() {
-    // return "wei";
-    client.taskrouter.v1
-        .workspaces(workspaceSid)
-        .workers
-        .list()
-        .then((workers) => {
-            var result = [];
-            workers.forEach(function(worker, i){
-                result[i] = {
-                    'accountSid': worker.accountSid,
-                    'activityName': worker.activityName,
-                    'activitySid': worker.activitySid,
-                    'attributes': worker.attributes,
-                    'available': worker.available,
-                    'dateCreated': worker.dateCreated,
-                    'dateStatusChanged': worker.dateStatusChanged,
-                    'dateUpdated': worker.dateUpdated,
-                    'friendlyName': worker.friendlyName,
-                    'sid': worker.sid,
-                    'workspaceSid': worker.workspaceSid
-                }
-            });
-            return result;
-        });
-}
-
-function parseRequestParameter (req) {
-    // GET Request parameters.
-    var obj = req.body;
-    var result = Object.keys(obj).filter( (key) => { 
-        return obj[key] === '';
-    });
-
-    // Parse json text.
-    resultJson = JSON.parse(result[0]);
-
-    return resultJson;
-}
 
 module.exports = router;

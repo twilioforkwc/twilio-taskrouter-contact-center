@@ -11,7 +11,7 @@ const client = require('twilio')(accountSid, authToken);
 /**
  * Worker一覧取得API
  */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     // res.header('Content-Type', 'application/json; charset=utf-8')
     client.taskrouter.v1
         .workspaces(workspaceSid)
@@ -41,7 +41,7 @@ router.get('/', function (req, res, next) {
 /**
  * Worker詳細API
  */
-router.get('/show/:sid', function (req, res, next) {
+router.get('/show/:sid', function (req, res) {
     // Request Twioio API.
     try {
         client.taskrouter.v1
@@ -64,7 +64,7 @@ router.get('/show/:sid', function (req, res, next) {
 /**
  * Worker追加API
  */
-router.post('/create', function (req, res, next) {
+router.post('/create', function (req, res) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
     var mAttributes = {
@@ -79,9 +79,7 @@ router.post('/create', function (req, res, next) {
             friendlyName: paramsJson.name,
             activitySid: paramsJson.activity,
             attributes: JSON.stringify(mAttributes),
-        }).then(reseult => {
-            res.send({ status: "OK" });
-        });
+        }).then(function() { res.send({ status: "OK" }); });
     } catch (error) {
         res.send({ status: "NG" });
     }
@@ -90,7 +88,7 @@ router.post('/create', function (req, res, next) {
 /**
  * Worker更新API
  */
-router.put('/update', function (req, res, next) {
+router.put('/update', function (req, res) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
     var mAttributes = {
@@ -98,7 +96,6 @@ router.put('/update', function (req, res, next) {
         technical_skill: paramsJson.skills,
         languages: paramsJson.languages,
     };
-    console.log(paramsJson);
     // Request Twioio API.
     try {
         client.taskrouter.v1
@@ -109,14 +106,8 @@ router.put('/update', function (req, res, next) {
                 activitySid: paramsJson.activity,
                 attributes: JSON.stringify(mAttributes),
             })
-            .then(
-                worker =>
-                {
-                    res.send({ status: "OK" });
-                }
-            );
+            .then( function() { res.send({ status: "OK" }); });
     } catch (error) {
-        console.log(error);
         res.send({ status: "NG" });
     }
 });
@@ -124,7 +115,7 @@ router.put('/update', function (req, res, next) {
 /**
  * Worker削除API
  */
-router.delete('/:sid', function (req, res, next) {
+router.delete('/:sid', function (req, res) {
     // Request Twioio API.
     try {
         client.taskrouter.v1
@@ -133,7 +124,6 @@ router.delete('/:sid', function (req, res, next) {
             .remove();
         res.send({ status: "OK" });
     } catch (error) {
-        console.log(error);
         res.send({ status: "NG" });
     }
 });
@@ -146,7 +136,7 @@ function parseRequestParameter (req) {
     });
 
     // Parse json text.
-    resultJson = JSON.parse(result[0]);
+    var resultJson = JSON.parse(result[0]);
 
     return resultJson;
 }

@@ -11,7 +11,7 @@ const ClientCapability = require('twilio').jwt.ClientCapability;
 /**
  * トークン生成
  */
-router.get('/generateToken/:sid', function (req, res, next) {
+router.get('/generateToken/:sid', function (req, res) {
     const identity = req.params.sid;
     // res.send('test'+authToken);
     const capability = new ClientCapability({

@@ -161,7 +161,7 @@
                         selectedSkill: this.form.selected_skill,
                     }))
                     .then(response => {
-                        // console.log(response.data.status);
+                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             // console.log('ワークフローの更新に成功しました');
                             location.href = '/#/workflows';

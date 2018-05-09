@@ -5,7 +5,7 @@ const extension = 'json';
 const file_path = 'datas/'+extension+'/';
 
 /* Get data from a file designated. */
-router.get('/:file_name', function (req, res, next) {
+router.get('/:file_name', function (req, res) {
     fs.readFile(file_path+req.params.file_name+'.'+extension, 'utf-8', (err, data) => {
         if (err) {
             res.send({ status: "NG", message: err, result: null });
@@ -16,7 +16,7 @@ router.get('/:file_name', function (req, res, next) {
 });
 
 /* Write data to a file designated. */
-router.post('/:file_name', function (req, res, next) {
+router.post('/:file_name', function (req, res) {
     fs.writeFile(file_path+req.params.file_name+'.'+extension, JSON.stringify(req.body), function (err) {
         if (err) {
             res.send({ status: "NG", message: err, result: null });

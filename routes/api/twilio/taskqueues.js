@@ -11,7 +11,7 @@ const client = require('twilio')(accountSid, authToken);
 /**
  * キューリスト取得API
  */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     client.taskrouter.v1
     .workspaces(workspaceSid)
     .taskQueues
@@ -19,7 +19,6 @@ router.get('/', function (req, res, next) {
     .then((taskQueues) => {
         var result = [];
         taskQueues.forEach((taskQueue, i) => {
-            console.log(taskQueue);
             result[i] = {
                 'friendlyName' : taskQueue.friendlyName,
                 'maxReservedWorkers' : taskQueue.maxReservedWorkers,
@@ -37,7 +36,7 @@ router.get('/', function (req, res, next) {
 /**
  * Worker詳細API
  */
-router.get('/show/:sid', function (req, res, next) {
+router.get('/show/:sid', function (req, res) {
     // Request Twioio API.
     try {
         client.taskrouter.v1
@@ -61,7 +60,7 @@ router.get('/show/:sid', function (req, res, next) {
 /**
  * Worker追加API
  */
-router.post('/create', function (req, res, next) {
+router.post('/create', function (req, res) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
 
@@ -73,9 +72,7 @@ router.post('/create', function (req, res, next) {
             assignmentActivitySid: paramsJson.assignment_activity,
             maxReservedWorkers: paramsJson.max_reserved_worker,
             targetWorkers: paramsJson.task_queue_key+' HAS "'+paramsJson.task_queue_val+'"',
-        }).then(reseult => {
-            res.send({ status: "OK" });
-        });
+        }).then(function() { res.send({ status: "OK" }); });
     } catch (error) {
         res.send({ status: "NG" });
     }
@@ -84,7 +81,7 @@ router.post('/create', function (req, res, next) {
 /**
  * Worker更新API
  */
-router.put('/update', function (req, res, next) {
+router.put('/update', function (req, res) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
     // Request Twioio API.
@@ -97,14 +94,8 @@ router.put('/update', function (req, res, next) {
                 max_reserved_workers: paramsJson.max_reserved_worker,
                 target_workers: paramsJson.task_queue_key+' HAS "'+paramsJson.task_queue_val+'"',
                 })
-            .then(
-                taskQueue =>
-                {
-                    res.send({ status: "OK" });
-                }
-            );
+            .then( function() { res.send({ status: "OK" }); });
     } catch (error) {
-        console.log(error);
         res.send({ status: "NG" });
     }
 });
@@ -112,7 +103,7 @@ router.put('/update', function (req, res, next) {
 /**
  * Worker削除API
  */
-router.delete('/:sid', function (req, res, next) {
+router.delete('/:sid', function (req, res) {
     // Request Twioio API.
     try {
         client.taskrouter.v1
@@ -121,7 +112,6 @@ router.delete('/:sid', function (req, res, next) {
             .remove();
         res.send({ status: "OK" });
     } catch (error) {
-        console.log(error);
         res.send({ status: "NG" });
     }
 });
@@ -134,7 +124,7 @@ function parseRequestParameter (req) {
     });
 
     // Parse json text.
-    resultJson = JSON.parse(result[0]);
+    var resultJson = JSON.parse(result[0]);
 
     return resultJson;
 }
