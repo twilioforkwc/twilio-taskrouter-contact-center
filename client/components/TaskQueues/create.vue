@@ -78,9 +78,7 @@
                         max_reserved_worker: this.form.max_reserved_worker,
                     }))
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('タスクキューの登録に成功しました');
                             location.href = '/#/taskqueues';
                             Notification.success(
                                 {
@@ -89,7 +87,6 @@
                                 }
                             );
                         } else {
-                            console.log('タスクキューの登録に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

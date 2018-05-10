@@ -66,7 +66,6 @@
                         var outputVolumeBar = document.getElementById('output-volume');
                         var inputVolumeBar = document.getElementById('input-volume');
                         var volumeIndicators = document.getElementById('volume-indicators');
-                        console.log(response.data);
                         Twilio.Device.setup(response.data.token);
                         Twilio.Device.ready(function (device) {
                             log('Twilio.Device Ready!');
@@ -85,7 +84,6 @@
                             document.getElementById('button-pickup').style.display = 'none';
                             document.getElementById('button-hangup').style.display = 'inline';
                             volumeIndicators.style.display = 'block';
-                            // bindVolumeIndicators(conn);
                             conn.volume(function (inputVolume, outputVolume) {
                                 var inputColor = 'red';
                                 if (inputVolume < .50) {
@@ -129,8 +127,6 @@
                         console.log(response.data);
                         setClientNameUI(response.data.identity);
 
-                        // Twilio.Device.audio.on('deviceChange', updateAllDevices);
-
                         // Show audio selection UI if it is supported by the browser.
                         if (Twilio.Device.audio.isSelectionSupported) {
                             document.getElementById('output-selection').style.display = 'block';
@@ -170,8 +166,6 @@
                     } else {
                         console.log('connected');
                         // // Now that we're connected, lets light up our board and play!
-                        // $buttons.attr('disabled', false);
-                        // $message.html('Sync is live!');
                         vueObj.message = 'Sync is live!';
                     }
                 });

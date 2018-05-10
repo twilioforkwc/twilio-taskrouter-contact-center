@@ -70,7 +70,6 @@
             handleDelete: function (index, row_data) {
                 axios.delete("/api/twilio/taskqueues/"+row_data.sid)
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             this.getListData();
                             Notification.success(
@@ -80,7 +79,6 @@
                                 }
                             );
                         } else {
-                            console.log('タスクキューの削除に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

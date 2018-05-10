@@ -32,10 +32,7 @@
     </div>
 </template>
 
-
-
 <script>
-
     import axios from 'axios';
     import { Notification } from 'element-ui';
 
@@ -79,7 +76,6 @@
             getActivities() {
                 axios.get("/api/twilio/activities")
                     .then(response => {
-                        console.log(response.data);
                         this.activities = response.data;
                         this.activities.forEach(element => {
                             if(element.friendlyName == vueObj.form.activity){
@@ -97,7 +93,6 @@
                     }))
                     .then(response => {
                         if (response.data.status === 'OK') {
-                            console.log('ワーカーの登録に成功しました');
                             location.href = '/#/workers';
                             Notification.success(
                                 {
@@ -106,7 +101,6 @@
                                 }
                             );
                         } else {
-                            console.log('ワーカーの登録に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

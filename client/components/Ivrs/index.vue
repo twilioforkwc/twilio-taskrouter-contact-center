@@ -247,7 +247,6 @@
             saveLanguages: function() {
                 axios.post("/api/db/files/languages", this.languages)
                     .then(response => {
-                        console.log(response.data.message);
                         this.getLanguages();
                     });
             },

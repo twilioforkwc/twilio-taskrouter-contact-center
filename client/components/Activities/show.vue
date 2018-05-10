@@ -52,14 +52,10 @@
         mounted() {
             axios.get("/api/twilio/workers/show/" + this.$route.params.sid)
                 .then(response => {
-                    console.log(response.data.status);
                     if (response.data.status === 'OK') {
-                        // location.href = '/#/workers';
                         this.form.name = response.data.friendlyName;
                         this.form.activity = response.data.activityName;
                         this.form.attributes = response.data.attributes;
-                    } else {
-                        console.log('NGNGNGNGNGGN');
                     }
                 });
         },

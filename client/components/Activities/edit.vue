@@ -37,15 +37,12 @@
             }
         },
         mounted() {
-            console.log(this.$route.params.sid);
             axios.get("/api/twilio/activities/show/" + this.$route.params.sid)
                 .then(response => {
-                    console.log(response.data.status);
                     if (response.data.status === 'OK') {
                         this.form.name = response.data.friendlyName;
                         this.form.available = response.data.available;
                     } else {
-                        console.log('アクティビティ情報の取得に失敗しました');
                         Notification.error(
                             {
                                 title: "Error",
@@ -63,9 +60,7 @@
                         available: this.form.available,
                     }))
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('アクティビティの更新に成功しました');
                             location.href = '/#/activities';
                             Notification.success(
                                 {
@@ -74,7 +69,6 @@
                                 }
                             );
                         } else {
-                            console.log('アクティビティの更新に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

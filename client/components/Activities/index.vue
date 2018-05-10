@@ -53,7 +53,6 @@
         mounted() {
             axios.get("/api/twilio/activities")
                 .then(response => {
-                    console.log(response.data[0]);
                     this.msg = response.data[0].friendlyName
                     this.activities = response.data;
                 });
@@ -69,10 +68,8 @@
                 location.href = '/#/activities/'+row_data.sid+'/edit';
             },
             handleDelete: function (index, row_data) {
-                // location.href = '/#/activities/show';
                 axios.delete("/api/twilio/activities/"+row_data.sid)
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             location.href = '/#/activities';
                             Notification.success(
@@ -82,7 +79,6 @@
                                 }
                             );
                         } else {
-                            console.log('アクティビティの削除に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
@@ -110,5 +106,4 @@
     el-table-column:first-child {
         text-align: center;
     }
-
 </style>

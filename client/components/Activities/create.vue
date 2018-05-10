@@ -46,12 +46,9 @@
                         activity: this.form.activity,
                         skills: this.form.skills,
                         languages: this.form.languages,
-                        // attributes: this.form.attributes
                     }))
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('アクティビティの登録に成功しました');
                             location.href = '/#/activities';
                             Notification.success(
                                 {
@@ -60,7 +57,6 @@
                                 }
                             );
                         } else {
-                            console.log('アクティビティの登録に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

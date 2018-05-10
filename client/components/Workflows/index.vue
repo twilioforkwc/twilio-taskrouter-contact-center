@@ -6,10 +6,6 @@
             <el-table :data="operators" style="width: 100%">
                 <el-table-column label="WORKFLOW">
                     <template slot-scope="scope">
-                        <!-- <el-popover trigger="hover" placement="top">
-                            <p>Name: {{ scope.row.friendlyName }}</p>
-                            <p>Sid: {{ scope.row.sid }}</p>
-                        </el-popover> -->
                         <div slot="reference" class="name-wrapper">
                             <el-tag size="medium">{{ scope.row.friendlyName }}</el-tag>
                         </div>
@@ -79,7 +75,6 @@
                 location.href = '/#/workflows/'+row_data.sid+'/edit';
             },
             handleDelete: function (index, row_data) {
-                // location.href = '/#/workflows/show';
                 axios.delete("/api/twilio/workflows/"+row_data.sid)
                     .then(response => {
                         console.log(response.data.status);

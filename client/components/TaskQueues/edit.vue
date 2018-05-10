@@ -63,9 +63,7 @@
                         this.form.task_queue_key = split_data[0];
                         this.form.task_queue_val = split_data[1];
                         this.form.max_reserved_worker = response.data.maxReservedWorkers;
-                        // this.form.attributes = response.data.attributes;
                     } else {
-                        console.log('タスクキュー情報の取得に失敗しました');
                         Notification.error(
                             {
                                 title: "Error",
@@ -84,9 +82,7 @@
                         max_reserved_worker: this.form.max_reserved_worker,
                     }))
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('タスクキューを更新しました。');
                             location.href = '/#/taskqueues';
                             Notification.success(
                                 {
@@ -95,7 +91,6 @@
                                 }
                             );
                         } else {
-                            console.log('タスクキューの更新に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

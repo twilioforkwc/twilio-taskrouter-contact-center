@@ -42,11 +42,11 @@ Set the ngrok variable from result above.
 
 * NGROK_GLOBAL_DOMAIN=https://[YOUR_SUB_DOMAIN].ngrok.io/
 
-Purchase your Twilio number for customer call.
+Get your Twilio number for customer call on Twilio console.
 
 https://jp.twilio.com/console/phone-numbers/incoming
 
-Set voice url to your Twilio number for incoming call.
+Set voice url to your Twilio number for incoming call on Twilio Console.
 
 * VOICE_URL(POST)：https://[YOUR_SUB_DOMAIN].ngrok.io/api/twilio/twiml/voices/ivr
 

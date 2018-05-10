@@ -2,7 +2,8 @@
     "parserOptions": {
         "ecmaVersion": 7,
         "sourceType": "script",
-        "ecmaFeatures": {}
+        "ecmaFeatures": {},
+        "sourceType": "module"
     },
     "rules": {
         "constructor-super": 2,

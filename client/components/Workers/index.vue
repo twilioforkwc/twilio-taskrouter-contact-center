@@ -44,7 +44,6 @@
 </template>
 
 <script>
-
     import axios from 'axios';
 
     export default {
@@ -76,7 +75,6 @@
                 location.href = '/#/workers/'+row_data.sid+'/edit';
             },
             handleDelete: function (index, row_data) {
-                // location.href = '/#/workers/show';
                 axios.delete("/api/twilio/workers/"+row_data.sid)
                     .then(response => {
                         if (response.data.status === 'OK') {
@@ -88,7 +86,6 @@
                                 }
                             );
                         } else {
-                            console.log('ワーカーの削除に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

@@ -51,54 +51,6 @@
                                         </div>
                                     </el-col>
                                 </el-row>
-                                <!-- <el-row :gutter="20" type="flex" class="row-bg" justify="space-between">
-                                    <el-col :span="6">
-                                        <div class="grid-content">
-                                            <el-form-item label="始業時間">
-                                                <el-time-select v-model="form.start_time"
-                                                                :picker-options="{ start: '00:00', step: '00:30', end: '24:00' }"
-                                                                placeholder="Select time">
-                                                </el-time-select>
-                                            </el-form-item>
-                                        </div>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <div class="grid-content">
-                                            <el-form-item label="終業時間">
-                                                <el-time-select v-model="form.end_time"
-                                                                :picker-options="{ start: '00:00', step: '00:30', end: '24:00' }"
-                                                                placeholder="Select time">
-                                                </el-time-select>
-                                            </el-form-item>
-                                        </div>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <div class="grid-content">
-                                            <el-form-item label="言語の選択">
-                                                <el-select v-model="form.selected_language" multiple>
-                                                    <el-option v-for="task_queue in task_queue_datas"
-                                                               v-if="checkKey(task_queue.friendlyName, 'languages')"
-                                                               v-bind:label="getKey(task_queue.friendlyName)"
-                                                               v-bind:value="getKey(task_queue.friendlyName)">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item>
-                                        </div>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <div class="grid-content">
-                                            <el-form-item label="スキルの選択">
-                                                <el-select v-model="form.selected_skill" multiple>
-                                                    <el-option v-for="task_queue in task_queue_datas"
-                                                               v-if="checkKey(task_queue.friendlyName, 'skills')"
-                                                               v-bind:label="getKey(task_queue.friendlyName)"
-                                                               v-bind:value="getKey(task_queue.friendlyName)">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item>
-                                        </div>
-                                    </el-col>
-                                </el-row> -->
                             </template>
                         </el-tab-pane>
                         <el-tab-pane label="View as JSON" name="second">
@@ -141,7 +93,6 @@
             }
         },
         mounted() {
-            // console.log(this.$route.params.sid);
             this.getWorkflowData();
             this.getTaskQueuesList();
         },
@@ -163,7 +114,6 @@
                     .then(response => {
                         console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            // console.log('ワークフローの更新に成功しました');
                             location.href = '/#/workflows';
                             Notification.success(
                                 {
@@ -172,7 +122,6 @@
                                 }
                             );
                         } else {
-                            // console.log('ワークフローの更新に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
@@ -188,7 +137,6 @@
             getWorkflowData: function () {
                 axios.get("/api/twilio/workflows/show/" + this.$route.params.sid)
                     .then(response => {
-                        // console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             var filter = response.data.filters[0];
                             this.form.name = response.data.friendlyName;
@@ -202,13 +150,7 @@
                             this.form.filter_friendly_name = filter.filter_friendly_name;
                             this.form.task_queue_sid = filter.targets[0].queue;
                             this.form.expression = filter.expression;
-                            // this.form.start_time = filter.start_time;
-                            // this.form.end_time = filter.end_time;
-                            // this.form.selected_language = filter.selected_languages;
-                            // this.form.selected_skill = filter.selected_skills;
-                            console.log(response.data.filters);
                         } else {
-                            // console.log('ワークフロー情報の取得に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",

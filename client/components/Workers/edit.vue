@@ -87,7 +87,6 @@
                             this.form.languages = JSON.parse(response.data.attributes).languages;
                             this.form.attributes = response.data.attributes;
                         } else {
-                            console.log('ワーカー情報の取得に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
@@ -100,7 +99,6 @@
             getActivities() {
                 axios.get("/api/twilio/activities")
                     .then(response => {
-                        console.log(response.data);
                         this.activities = response.data;
                         this.activities.forEach(element => {
                             if(element.friendlyName == vueObj.form.activity){
@@ -118,9 +116,7 @@
                         languages: this.form.languages,
                     }))
                     .then(response => {
-                        console.log(response.data.status);
                         if (response.data.status === 'OK') {
-                            console.log('ワーカーの更新に成功しました');
                             location.href = '/#/workers';
                             Notification.success(
                                 {
@@ -129,7 +125,6 @@
                                 }
                             );
                         } else {
-                            console.log('ワーカーの更新に失敗しました');
                             Notification.error(
                                 {
                                     title: "Error",
