@@ -11,6 +11,7 @@ const authToken = config.TWILIO_AUTH_TOKEN;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const NgrokDomain = config.NGROK_GLOBAL_DOMAIN;
 const ConferenceNumber = config.TWILIO_CONFERENCE_NUMBER;
+const WorkspaceSID = config.TWILIO_TASKROUTER_WORKSPACE_SID;
 const WorkflowSID = config.TWILIO_TASKROUTER_WORKFLOW_SID;
 const client = require('twilio')(accountSid, authToken);
 
@@ -164,6 +165,52 @@ router.post('/voices/dial/:client', function (req) {
             })
             .then( function() { });
     }
+});
+
+/**
+ * Assignment callback endpoint.
+ */
+router.post('/voices/callback', function (req, res) {
+    console.log('#####CallStatusChanged CALLBACK######');
+    // console.log(req.body);
+    console.log('###########');
+    // console.log(req.body.CallSid);
+    const opts = {status: 'in-progress'};
+    client.conferences.each(opts, (conference) => {
+        console.log(conference.sid);
+        client.conferences(conference.sid).update({
+            status: 'completed'
+        });
+    });
+
+    setTimeout(function(){
+        client.taskrouter.v1
+            .workspaces(WorkspaceSID)
+            .tasks
+            .list()
+            .then((tasks) => {
+                tasks.forEach((task) => {
+                    console.log('###########');
+                    console.log(task.assignmentStatus);
+                    console.log('###########');
+                    if(task.assignmentStatus == 'wrapping'){
+                        client.taskrouter.v1
+                            .workspaces(WorkspaceSID)
+                            .tasks(task.sid)
+                            .update({
+                                assignmentStatus: 'completed',
+                                reason: 'call was finished.',
+                            })
+                            .then((task) => {
+                                console.log(task.assignmentStatus);
+                                console.log(task.reason);
+                            });
+                    }
+                });
+            });
+        res.send('COMPLETE');
+    },2000);
+
 });
 
 module.exports = router;

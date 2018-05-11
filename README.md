@@ -42,13 +42,18 @@ Set the ngrok variable from result above.
 
 * NGROK_GLOBAL_DOMAIN=https://[YOUR_SUB_DOMAIN].ngrok.io/
 
-Get your Twilio number for customer call on Twilio console.
+Prepare your Twilio number for incoming call, then set voice url to IVR endpoint on Twilio Console.
+Additionally, set status callback url to CALLBACK endpoint too.
 
 https://jp.twilio.com/console/phone-numbers/incoming
 
-Set voice url to your Twilio number for incoming call on Twilio Console.
+- Voice URL
 
-* VOICE_URL(POST)：https://[YOUR_SUB_DOMAIN].ngrok.io/api/twilio/twiml/voices/ivr
+    `https://[GLOBAL_DOMAIN]/api/twilio/twiml/voices/ivr`
+
+- Status Callback URL
+
+    `https://[GLOBAL_DOMAIN]/api/twilio/twiml/voices/callback`
 
 Then, start your application temporary.
 
