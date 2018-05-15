@@ -33,23 +33,24 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary">会話を聞く</el-button>
-                        <el-button size="mini" type="success" @click="join">会話に参加する</el-button>
+                        <el-button size="mini" type="primary" @click="join" :data-sid="scope.row.sid">会話を聞く</el-button>
+                        <el-button size="mini" type="success" @click="join" :data-sid="scope.row.sid">会話に参加する</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
     </div>
-</template>
 
+
+</template>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
     import axios from 'axios';
     import { Notification } from 'element-ui';
-
     //Our interface to the Sync service
     var syncClient;
     var vueObj;
+    var conn;
 
     export default {
         name: 'SuperVisors',
@@ -69,6 +70,21 @@
                 axios.get("/api/twilio/token_generator/generate/supervisor")
                     .then(response => {
                         this.listenSyncClient(response);
+                    });
+                axios.get("/api/twilio/capabilities/generateToken/supervisor")
+                    .then(response => {
+                        Twilio.Device.setup(response.data.token);
+                        Twilio.Device.disconnect(function (con) {
+                            conn = null;
+                        });
+                        Twilio.Device.error(function (error) {
+                            Notification.error(
+                                {
+                                    title: "Error",
+                                    message: "接続に失敗しました"
+                                }
+                            );
+                        });
                     });
             },
             getOperators: function() {
@@ -92,11 +108,35 @@
                     });
                 });
             },
-            join: function() {
+            join: function(e) {
+                var obj = $(e.target);
+                if(obj.parent().hasClass('hangup')) {
+                    this.disConnect(obj);
+                    return;
+                }
+                var sid = obj.parent().attr('data-sid');
+                if(!sid || conn) {
+                    return;
+                }
+                var muted = false;
+                if(obj.parent().hasClass('el-button--primary')) {
+                    muted = true;
+                }
                 var params = {
-                    To: '+815031963222' // TODO: 動的に変更する
+                    App_Muted: muted,
+                    App_WorkerSID: sid
                 };
-                Twilio.Device.connect(params);
+                conn = Twilio.Device.connect(params);
+                obj.text('切断').parent().addClass('hangup');
+            },
+            disConnect: function(obj) {
+                obj.parent().removeClass('hangup');
+                if(obj.parent().hasClass('el-button--primary')) {
+                    obj.text('会話を聞く');
+                } else {
+                    obj.text('会話に参加する');
+                }
+                if(conn) conn.disconnect();
             },
         }
     }
