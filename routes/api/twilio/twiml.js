@@ -136,13 +136,24 @@ router.post('/voices/conference', function (req, res) {
             console.log('#####WORKER######');
             console.log(data);
             console.log('###########');
-            dial.conference({
-                statusCallback: '/api/twilio/twiml/voices/dial/'+JSON.parse(data).worker,
-                statusCallbackEvent: 'join',
-                endConferenceOnExit: true
-            }, 'TwilioTaskRouterContactConference');
-            
-            res.send(response.toString());
+
+            var muted = false;
+            if(req.body.App_Muted === 'true') muted = true;
+            client.conferences.each({
+                    status: 'in-progress'
+                },
+                conferences => {
+                    console.log('#####FRIENDLYNAME######');
+                    console.log(conferences.friendlyName)
+                    console.log('###########');
+                    dial.conference({
+                        muted: muted,
+                        statusCallback: '/api/twilio/twiml/voices/dial/'+JSON.parse(data).worker,
+                        statusCallbackEvent: 'join',
+                    }, conferences.friendlyName);
+                    res.send(response.toString());
+                }
+            );
         }
     });
 });
