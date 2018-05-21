@@ -55,7 +55,7 @@ https://jp.twilio.com/console/phone-numbers/incoming
 
     `https://[GLOBAL_DOMAIN]/api/twilio/twiml/voices/callback`
 
-It is necessary to use the Supervisor.
+Set voice url to TwiML App when using Supervisor.
 
 https://jp.twilio.com/console/voice/twiml/apps/
 
