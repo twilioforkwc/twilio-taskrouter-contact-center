@@ -55,6 +55,14 @@ https://jp.twilio.com/console/phone-numbers/incoming
 
     `https://[GLOBAL_DOMAIN]/api/twilio/twiml/voices/callback`
 
+Set voice url to TwiML App when using Supervisor.
+
+https://jp.twilio.com/console/voice/twiml/apps/
+
+- Voice URL
+
+    `https://[GLOBAL_DOMAIN]/api/twilio/twiml/voices/conference`
+
 Then, start your application temporary.
 
 `docker-compose up`

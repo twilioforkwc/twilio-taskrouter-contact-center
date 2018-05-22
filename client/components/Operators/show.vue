@@ -180,50 +180,60 @@
         var outputVolumeBar = document.getElementById('output-volume');
         var inputVolumeBar = document.getElementById('input-volume');
         var volumeIndicators = document.getElementById('volume-indicators');
-        // Bind button to make call
-        document.getElementById('button-call').onclick = function () {
-            // get the phone number to connect the call to
-            var params = {
-                To: document.getElementById('phone-number').value
-            };
 
-            console.log('Calling ' + params.To + '...');
-            Twilio.Device.connect(params);
+        // Bind button to make call
+        if(document.getElementById('button-call') != null){
+            document.getElementById('button-call').onclick = function () {
+                // get the phone number to connect the call to
+                var params = {
+                    To: document.getElementById('phone-number').value
+                };
+                console.log('Calling ' + params.To + '...');
+                Twilio.Device.connect(params);
+            }
         };
 
         // Bind button to hangup call
-        document.getElementById('button-hangup').onclick = function () {
-            log('Hanging up...');
-            Twilio.Device.disconnectAll();
-        };
+        if(document.getElementById('button-hangup') != null){
+            document.getElementById('button-hangup').onclick = function () {
+                log('Hanging up...');
+                Twilio.Device.disconnectAll();
+            };
+        }
 
         // Bind button to pick up the call
-        document.getElementById('button-pickup').onclick = function () {
-            log('Answered...');
-            // Twilio.Device.disconnectAll();
-            tmpConnect.accept();
-        };
+        if(document.getElementById('button-pickup') != null){
+            document.getElementById('button-pickup').onclick = function () {
+                log('Answered...');
+                // Twilio.Device.disconnectAll();
+                tmpConnect.accept();
+            };
+        }
 
-        document.getElementById('get-devices').onclick = function () {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(updateAllDevices);
-        };
+        if(document.getElementById('get-devices') != null){
+            document.getElementById('get-devices').onclick = function () {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(updateAllDevices);
+            };
+        }
 
-        speakerDevices.addEventListener('change', function () {
-            var selectedDevices = [].slice.call(speakerDevices.children)
-                .filter(function (node) { return node.selected; })
-                .map(function (node) { return node.getAttribute('data-id'); });
+        if(speakerDevices != null){
+            speakerDevices.addEventListener('change', function () {
+                var selectedDevices = [].slice.call(speakerDevices.children)
+                    .filter(function (node) { return node.selected; })
+                    .map(function (node) { return node.getAttribute('data-id'); });
+                Twilio.Device.audio.speakerDevices.set(selectedDevices);
+            });
+        }
 
-            Twilio.Device.audio.speakerDevices.set(selectedDevices);
-        });
-
-        ringtoneDevices.addEventListener('change', function () {
-            var selectedDevices = [].slice.call(ringtoneDevices.children)
-                .filter(function (node) { return node.selected; })
-                .map(function (node) { return node.getAttribute('data-id'); });
-
-            Twilio.Device.audio.ringtoneDevices.set(selectedDevices);
-        });
+        if(ringtoneDevices != null){
+            ringtoneDevices.addEventListener('change', function () {
+                var selectedDevices = [].slice.call(ringtoneDevices.children)
+                    .filter(function (node) { return node.selected; })
+                    .map(function (node) { return node.getAttribute('data-id'); });
+                Twilio.Device.audio.ringtoneDevices.set(selectedDevices);
+            });
+        }
 
         function updateAllDevices() {
             updateDevices(speakerDevices, Twilio.Device.audio.speakerDevices.get());
