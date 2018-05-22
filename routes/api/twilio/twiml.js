@@ -70,7 +70,7 @@ router.post('/voices/enqueue', function (req, res) {
             response.enqueue({
                 workflowSid: WorkflowSID,
             })
-            .task({}, JSON.stringify(json));
+            .task({timeout: 18600}, JSON.stringify(json));
 
             res.send(response.toString());
         }
@@ -94,15 +94,22 @@ router.post('/voices/assignment', function (req, res) {
     }
     console.log(to);
     var response = {
-        'instruction': 'Conference',
+        // instruction: 'Redirect',
+        // url: 'http://mogupiyo.net/twilion24/redirect.xml',
+        // call_sid: JSON.parse(req.body.TaskAttributes).call_sid,
+        // accept: true
+        // timeout: 120
+        'instruction': 'conference',
         // 'to': "client:"+req.body.WorkerSid,
         'to': to,
         'from': ConferenceNumber,
         'status_callback': NgrokDomain+'api/twilio/twiml/voices/assignment/callback',
-        'timeout': 1,
+        'timeout': 120,
         'status_callback_events': 'initiated',
-        'end_conference_on_exit': true
+        'end_conference_on_exit': true,
+        'beep': false
     };
+    // var response = {};
     fs.writeFile(file_path+'assignment'+'.'+extension, JSON.stringify({worker: req.body.WorkerSid}), function (err) {
         if (err) {
             res.send({ status: "NG", message: err, result: null });
@@ -110,6 +117,88 @@ router.post('/voices/assignment', function (req, res) {
             res.send(JSON.stringify(response));
         }
     });
+});
+
+/**
+ * Reservation Update.
+ */
+router.get('/voices/reservation/fetch', function (req, res) {
+    console.log('#####RESERVATION RETRIEVE######');
+    console.log(req.body);
+    console.log('###########');
+
+    var taskSid = 'WT49b540b1f5d018567c32749f7014c2c6';
+    var reservationSid = 'WR31c9e4103d09b8e4b0374040b30c4524';
+    // var worker = 'client:WK5a6be7a82dc06f07ae681dcb1c8c4076';
+
+    client.taskrouter.v1
+    .workspaces(WorkspaceSID)
+    .tasks(taskSid)
+    .reservations(reservationSid)
+    .fetch()
+    .then((reservation) => {
+        console.log(reservation);
+        res.send('done');
+    });
+});
+
+/**
+ * Reservation Update.
+ */
+router.get('/voices/conference/participants', function (req, res) {
+    console.log('#####Conference Participants######');
+    console.log(req.body);
+    console.log('###########');
+
+    client.conferences('CFf15960ee869315f25510ab2b6bf3ef3b')
+        .participants
+        .each(participants => console.log(participants));
+
+    res.send('OK');
+});
+
+/**
+ * Reservation Update.
+ */
+router.post('/voices/reservation/update', function (req, res) {
+    console.log('#####RESERVATION UPDATE######');
+    console.log(req.body);
+    console.log('###########');
+
+    var taskSid = 'WT49b540b1f5d018567c32749f7014c2c6';
+    var reservationSid = 'WR31c9e4103d09b8e4b0374040b30c4524';
+    // var worker = 'client:WK5a6be7a82dc06f07ae681dcb1c8c4076';
+
+    client.taskrouter.v1
+    .workspaces(WorkspaceSID)
+    .tasks(taskSid)
+    .reservations(reservationSid)
+    .update({
+        // instruction: 'redirect',
+        // redirectURI: '/voices/redirect/dial',
+        // to: worker,
+        // from: '+815031963222',
+        timeout: 400
+    })
+    .then((reservation) => {
+        console.log(reservation.reservationStatus);
+        console.log(reservation.workerName);
+        res.send('done');
+    });
+});
+
+/**
+ * Redirect URI for twiml dial timeout.
+ */
+router.post('/voices/redirect/dial', function (req, res) {
+    console.log('#####REDIRECT DIAL######');
+    console.log(req.body);
+    console.log('###########');
+    res.header('Content-Type', 'application/xml; charset=utf-8')
+    const response = new VoiceResponse();
+    const dial = response.dial({timeout: 50});
+    dial.conference({beep: false}, 'AgentConf1234');
+    res.send(response.toString());
 });
 
 /**

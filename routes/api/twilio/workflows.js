@@ -123,7 +123,8 @@ router.put('/update', function (req, res) {
                 {
                     "targets": [
                         {
-                            "queue": paramsJson.task_queue_sid
+                            "queue": paramsJson.task_queue_sid,
+                            "timeout": 15
                         }
                     ],
                     "filter_friendly_name": paramsJson.filterFriendlyName,
