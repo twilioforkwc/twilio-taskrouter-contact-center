@@ -72,6 +72,9 @@ router.post('/create', function (req, res) {
     // Parse json text.
     var paramsJson = parseRequestParameter(req);
     var expression = paramsJson.expression;
+    console.log('HOGEHGOEHOGHEOHGOEHGO');
+    console.log(expression);
+    console.log('HOGEHGOEHOGHEOHGOEHGO');
     var configuration = {
         "task_routing": {
             "filters": [
@@ -104,6 +107,9 @@ router.post('/create', function (req, res) {
             })
             .then(function(){
                 res.send({ status: "OK" });
+            }).catch(e => {
+                console.error('Got an error:', e.code, e.message);
+                res.send({ status: "NG", code: e.code, message: e.message });
             });
     } catch (error) {
         res.send({ status: "NG" });
@@ -150,6 +156,9 @@ router.put('/update', function (req, res) {
             })
             .then(function(){
                 res.send({ status: "OK" });
+            }).catch(e => {
+                console.error('Got an error:', e.code, e.message);
+                res.send({ status: "NG", code: e.code, message: e.message });
             });
     } catch (error) {
         res.send({ status: "NG" });

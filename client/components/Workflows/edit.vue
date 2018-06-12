@@ -126,7 +126,8 @@
                             Notification.error(
                                 {
                                     title: "Error",
-                                    message: "ワークフローの登録に失敗しました"
+                                    message: "ワークフローの更新に失敗しました。\n"
+                                            +"Error："+response.data.message
                                 }
                             );
                         }

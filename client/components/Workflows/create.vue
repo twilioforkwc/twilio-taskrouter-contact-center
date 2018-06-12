@@ -109,6 +109,7 @@
                             endTime: this.form.end_time,
                             selectedLanguage: this.form.selected_language,
                             selectedSkill: this.form.selected_skill,
+                            expression: encodeURIComponent(this.form.expression),
                         }))
                         .then(response => {
                             if (response.data.status === 'OK') {
@@ -123,7 +124,8 @@
                                 Notification.error(
                                     {
                                         title: "Error",
-                                        message: "ワークフローの登録に失敗しました"
+                                        message: "ワークフローの登録に失敗しました。\n"
+                                                +"Error："+response.data.message
                                     }
                                 );
                             }
