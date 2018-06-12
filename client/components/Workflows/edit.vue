@@ -45,8 +45,7 @@
                                     <el-col :span="24">
                                         <div class="grid-content">
                                             <el-form-item label="Configuration">
-                                                <el-input v-model="form.expression" type="textarea" :rows="6">
-                                                </el-input>
+                                                <el-input v-model="form.expression" type="textarea" :rows="6" :value="form.expression"></el-input>
                                             </el-form-item>
                                         </div>
                                     </el-col>
@@ -80,6 +79,7 @@
                 form: {
                     name: '',
                     sid: '',
+                    task_queue_sid: '',
                     assignmentCallbackUrl: '',
                     fallbackAssignmentCallbackUrl: '',
                     taskReservationTimeout: '',
@@ -110,9 +110,10 @@
                         endTime: this.form.end_time,
                         selectedLanguage: this.form.selected_language,
                         selectedSkill: this.form.selected_skill,
+                        expression: encodeURIComponent(this.form.expression),
                     }))
                     .then(response => {
-                        console.log(response.data.status);
+                        // console.log(response.data.status);
                         if (response.data.status === 'OK') {
                             location.href = '/#/workflows';
                             Notification.success(
