@@ -32,7 +32,7 @@
         "debug": "~3.1.0",
         "dotenv-safe": "~4.0.4",
         "element-ui": "^2.3.7",
-        "express": "^4.16.3",
+        "express": "^4.17.3",
         "fs": "0.0.1-security",
         "fs-extra": "^5.0.0",
         "jsonfile": "^4.0.0",
